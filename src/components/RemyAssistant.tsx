@@ -24,11 +24,10 @@ function Messages({ messages }: { messages: ConferenceChatMessages }) {
           <Croissant className="w-6 h-6 text-gold/60 absolute -bottom-1 -right-1" />
         </div>
         <p className="text-center text-cream/80 font-medium font-display text-lg">
-          Bonjour! I'm Remy 👨‍🍳
+          Hi! I’m your AI tutor ✨
         </p>
         <p className="text-xs text-cream/40 mt-2 text-center max-w-[220px]">
-          Your culinary guide to Haute Pâtisserie 2026. Ask about speakers,
-          sessions, or pastry techniques!
+          Ask a question about AI, explore a new idea, or get help with a project.
         </p>
       </div>
     )
@@ -72,12 +71,6 @@ function Messages({ messages }: { messages: ConferenceChatMessages }) {
   )
 }
 
-interface RemyAssistantProps {
-  speakerSlug?: string
-  talkSlug?: string
-  contextTitle?: string
-}
-
 // Export store for header control
 export const showRemyAssistant = new Store(false)
 
@@ -86,20 +79,13 @@ function subscribeToAssistant(onChange: () => void) {
   return () => subscription.unsubscribe()
 }
 
-export default function RemyAssistant({
-  speakerSlug,
-  talkSlug,
-  contextTitle,
-}: RemyAssistantProps) {
+export default function RemyAssistant() {
   const isOpen = useSyncExternalStore(
     subscribeToAssistant,
     () => showRemyAssistant.state,
     () => false,
   )
-  const { messages, sendMessage, isLoading } = useConferenceChat(
-    speakerSlug,
-    talkSlug,
-  )
+  const { messages, sendMessage, isLoading } = useConferenceChat()
   const [input, setInput] = useState('')
 
   const handleToggle = () => {
@@ -131,11 +117,6 @@ export default function RemyAssistant({
             <h3 className="font-display font-bold text-cream text-base tracking-tight">
               Remy
             </h3>
-            {contextTitle && (
-              <p className="text-xs text-copper/70 truncate max-w-[220px]">
-                🥐 {contextTitle}
-              </p>
-            )}
           </div>
         </div>
         <button
@@ -175,7 +156,7 @@ export default function RemyAssistant({
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about speakers, sessions, techniques..."
+              placeholder="Ask anything about AI..."
               disabled={isLoading}
               className="w-full rounded-xl border border-copper/20 bg-charcoal-light/50 pl-4 pr-12 py-3 text-sm text-cream placeholder-cream/30 focus:outline-none focus:ring-2 focus:ring-copper/40 focus:border-transparent resize-none overflow-hidden disabled:opacity-50 transition-all"
               rows={1}

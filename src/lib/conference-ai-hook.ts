@@ -4,15 +4,14 @@ import {
   createChatClientOptions,
 } from '@tanstack/ai-react'
 
-export const useConferenceChat = (speakerSlug?: string, talkSlug?: string) => {
+export const useConferenceChat = (
+  threadId = 'learning-ai-tutor',
+  initialMessages?: ConferenceChatMessages,
+) => {
   const chatOptions = createChatClientOptions({
-    threadId: 'conference-assistant',
-    connection: fetchServerSentEvents('/api/remy-chat', {
-      body: {
-        speakerSlug,
-        talkSlug,
-      },
-    }),
+    threadId,
+    ...(initialMessages?.length ? { initialMessages } : {}),
+    connection: fetchServerSentEvents('/api/remy-chat'),
   })
 
   return useChat(chatOptions)

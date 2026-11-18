@@ -1,140 +1,78 @@
+import { chat, toServerSentEventsResponse } from '@tanstack/ai'
+import { openaiCompatibleText } from '@tanstack/ai-openai/compatible'
 import { createFileRoute } from '@tanstack/react-router'
-import { chat, maxIterations, toServerSentEventsResponse } from '@tanstack/ai'
-import { anthropicText } from '@tanstack/ai-anthropic'
-import { openaiText } from '@tanstack/ai-openai'
-import { geminiText } from '@tanstack/ai-gemini'
-import { ollamaText } from '@tanstack/ai-ollama'
 
-import {
-  getSpeakerBySlug,
-  getTalkBySlug,
-  getAllSpeakers,
-  getAllTalks,
-  searchConference,
-} from '#/lib/conference-tools'
+const SYSTEM_PROMPT = `You are the Learning AI Tutor, a patient, encouraging guide who helps people understand AI and build practical skills.
+
+TEACHING STYLE:
+- Meet the learner at their level. Ask a brief clarifying question when their goal or background is unclear.
+- Explain ideas in plain language, then use a concrete example or analogy.
+- Teach step by step and check understanding with a small question or practice task when useful.
+- Encourage curiosity and acknowledge progress without being over the top.
+- For coding or API questions, show small working examples and explain how to adapt them.
+- EVERY response must end with a fenced html code block that draws a visual explanation with CSS. Include a style element and a compact HTML fragment with labeled shapes/cards that directly represent the learner’s question and your answer. Wrap the drawing in an element with id ai-board. Put each step or concept in its own element with class ai-node so the board can automatically draw connecting arrows between them. Arrange the concepts in a clear sequence; do not leave ideas as unconnected cards. Use a handwritten font stack such as Segoe Print, Comic Sans MS, cursive. Make the layout responsive, clear, and readable on a small board. Use only inline CSS and ordinary HTML/SVG elements. Never include scripts, external URLs, iframes, forms, or event handlers. Even greetings or short factual answers need a small visual that maps the question to its answer or example. Do not omit the drawing.
+- Be honest about uncertainty, current limitations, and when an answer needs verification.
+- Keep replies focused. Use headings, lists, and code blocks when they make the explanation easier to follow.
+
+You can help with AI foundations, prompting, machine learning, generative AI, API setup, automation, coding, project planning, privacy, and responsible use. You are a tutor, so guide the learner toward understanding rather than only giving them an answer.`
 
 export const Route = createFileRoute('/api/remy-chat')({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const requestSignal = request.signal
-
-        if (requestSignal.aborted) {
-          return new Response(null, { status: 499 })
-        }
-
         const abortController = new AbortController()
+        request.signal.addEventListener(
+          'abort',
+          () => abortController.abort(),
+          { once: true },
+        )
 
         try {
-          const body = await request.json()
-          const { messages, threadId } = body
-          const forwardedProps =
-            body.forwardedProps && typeof body.forwardedProps === 'object'
-              ? body.forwardedProps
-              : {}
-          const speakerSlug =
-            typeof forwardedProps.speakerSlug === 'string'
-              ? forwardedProps.speakerSlug
-              : typeof body.speakerSlug === 'string'
-                ? body.speakerSlug
-                : undefined
-          const talkSlug =
-            typeof forwardedProps.talkSlug === 'string'
-              ? forwardedProps.talkSlug
-              : typeof body.talkSlug === 'string'
-                ? body.talkSlug
-                : undefined
-          if (typeof threadId !== 'string' || !threadId.trim()) {
+          const apiKey = process.env.OPEN_ROUTER_API_KEY
+          if (!apiKey) {
             return Response.json(
-              { error: 'A threadId is required' },
-              { status: 400 },
+              { error: 'OPEN_ROUTER_API_KEY is not configured on the server.' },
+              { status: 503 },
             )
           }
 
-          const SYSTEM_PROMPT = `You are Remy, a charming and knowledgeable culinary assistant for the Haute Pâtisserie 2026 conference in Paris. You have a warm, enthusiastic personality and deep appreciation for the art of pastry and baking.
-
-PERSONALITY:
-- Speak with warmth and a touch of French flair (occasional "magnifique!", "c'est parfait!", etc.)
-- Be genuinely passionate about pastry, bread, and culinary arts
-- Knowledgeable about techniques, ingredients, and the history of baking
-- Helpful and encouraging to both novices and professionals
-
-CAPABILITIES:
-1. Use getSpeakerBySlug to get detailed information about a specific speaker
-2. Use getTalkBySlug to get detailed information about a specific session
-3. Use getAllSpeakers to see the complete speaker lineup
-4. Use getAllTalks to see all available sessions
-5. Use searchConference to find speakers or sessions matching a topic or keyword
-
-INSTRUCTIONS:
-- When asked about the conference, speakers, or sessions, use your tools to provide accurate information
-- Help attendees find sessions that match their interests
-- Share enthusiasm about the speakers and their expertise
-- If asked about pastry techniques, you can provide general knowledge while recommending relevant sessions
-- Keep responses conversational but informative
-- When recommending sessions, explain why they might be interesting based on the user's query
-
-${speakerSlug ? `CONTEXT: The user is viewing the profile of the speaker with slug "${speakerSlug}".` : ''}
-${talkSlug ? `CONTEXT: The user is viewing the session with slug "${talkSlug}".` : ''}
-
-Remember: You are the friendly face of Haute Pâtisserie 2026. Make every attendee feel welcome and excited about the culinary journey ahead!`
-
-          // Determine the best available provider
-          let provider: 'anthropic' | 'openai' | 'gemini' | 'ollama' = 'ollama'
-          let model: string = 'mistral:7b'
-          if (process.env.ANTHROPIC_API_KEY) {
-            provider = 'anthropic'
-            model = 'claude-haiku-4-5'
-          } else if (process.env.OPENAI_API_KEY) {
-            provider = 'openai'
-            model = 'gpt-4o'
-          } else if (process.env.GEMINI_API_KEY) {
-            provider = 'gemini'
-            model = 'gemini-2.0-flash-exp'
+          const body = await request.json()
+          if (!Array.isArray(body.messages)) {
+            return Response.json({ error: 'A messages array is required.' }, { status: 400 })
+          }
+          if (typeof body.threadId !== 'string' || !body.threadId.trim()) {
+            return Response.json({ error: 'A threadId is required.' }, { status: 400 })
           }
 
-          // Adapter factory pattern for multi-vendor support
-          const adapterConfig = {
-            anthropic: () =>
-              anthropicText((model || 'claude-haiku-4-5') as any),
-            openai: () => openaiText((model || 'gpt-4o') as any),
-            gemini: () => geminiText((model || 'gemini-2.0-flash-exp') as any),
-            ollama: () => ollamaText((model || 'mistral:7b') as any),
-          }
-
-          const adapter = adapterConfig[provider]()
+          const model = process.env.OPEN_ROUTER_MODEL || 'openai/gpt-4o-mini'
+          const adapter = openaiCompatibleText(
+            model,
+            {
+              name: 'openrouter',
+              api: 'chat-completions',
+              models: [model],
+              apiKey,
+              baseURL: 'https://openrouter.ai/api/v1',
+            },
+          )
 
           const stream = chat({
             adapter,
-            tools: [
-              getSpeakerBySlug,
-              getTalkBySlug,
-              getAllSpeakers,
-              getAllTalks,
-              searchConference,
-            ],
             systemPrompts: [SYSTEM_PROMPT],
-            agentLoopStrategy: maxIterations(5),
-            messages,
-            threadId,
+            messages: body.messages,
+            threadId: body.threadId,
             abortController,
           })
 
           return toServerSentEventsResponse(stream, { abortController })
-        } catch (error: any) {
-          console.error('Remy chat error:', error)
-          if (error.name === 'AbortError' || abortController.signal.aborted) {
+        } catch (error) {
+          console.error('Learning AI tutor error:', error)
+          if (error instanceof Error && error.name === 'AbortError') {
             return new Response(null, { status: 499 })
           }
-          return new Response(
-            JSON.stringify({
-              error: 'Failed to process chat request',
-              message: error.message,
-            }),
-            {
-              status: 500,
-              headers: { 'Content-Type': 'application/json' },
-            },
+          return Response.json(
+            { error: 'The tutor could not answer just now. Please try again.' },
+            { status: 500 },
           )
         }
       },

@@ -11,10 +11,11 @@ export default function Header() {
         </Link>
         <div className="header-nav">
           <Link to="/talks" activeProps={{ className: 'header-link is-current' }} className="header-link">Learn</Link>
+          <Link to="/tutor" activeProps={{ className: 'header-link is-current' }} className="header-link">AI tutor</Link>
           <Link to="/about" activeProps={{ className: 'header-link is-current' }} className="header-link">About</Link>
           <Link to="/contact" activeProps={{ className: 'header-link is-current' }} className="header-link">Contact</Link>
         </div>
-        <div className="header-actions"><ThemeToggle /><Link to="/talks" className="header-cta">Explore topics <span>↗</span></Link></div>
+        <div className="header-actions"><ThemeToggle /><Link to="/tutor" className="header-cta">Ask the tutor <span>↗</span></Link></div>
       </nav>
     </header>
   )
