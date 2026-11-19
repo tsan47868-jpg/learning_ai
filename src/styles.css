@@ -47,6 +47,32 @@
 @media(max-width:560px){.contact-hero{min-height:0;padding-top:3rem;padding-bottom:2rem}.contact-stamp{width:95px;height:95px;gap:.35rem;font-size:.72rem}.contact-stamp svg{width:17px}.contact-stamp b{right:9px;bottom:7px;font-size:.9rem}.contact-intro h1{font-size:3.4rem}.contact-intro>p:last-child{font-size:.95rem}.contact-options{grid-template-columns:1fr}.contact-card:last-child{grid-column:auto}.contact-card{min-height:0}.contact-card>p:not(.topic-eyebrow){min-height:0}.contact-bottom-inner{display:block}.contact-bottom-inner .home-button{margin-top:1.5rem}.contact-form-section{padding:1.25rem}.contact-form-row{grid-template-columns:1fr}}
 @media(max-width:560px){.topics-hero-copy h1{font-size:3.5rem}.topics-hero-art{min-height:280px}.topics-orbit{width:220px;height:220px}.topics-art-center{width:150px;height:150px}.topics-grid{grid-template-columns:1fr}.topics-card{min-height:0}.topics-card-copy{min-height:0}.topics-bottom-inner{display:block}.topics-bottom-inner .home-button{margin-top:1rem}}
 
+/* Keep the home page content centered across its sections. */
+.learning-home .home-hero{grid-template-columns:1.04fr .96fr;justify-items:center;text-align:center}
+.learning-home .hero-copy{width:100%;margin-inline:auto}
+.learning-home .hero-copy .home-eyebrow,.learning-home .hero-actions{justify-content:center}
+.learning-home .hero-intro,.learning-home .hero-note{margin-inline:auto}
+.learning-home .hero-art{width:min(100%,560px);margin-inline:auto}
+.learning-home .section-heading{flex-direction:column;align-items:center;text-align:center}
+.learning-home .section-heading .home-eyebrow{justify-content:center}
+.learning-home .section-summary{margin:.5rem auto 0}
+.learning-home .topic-card{text-align:center}
+.learning-home .topic-top{justify-content:center;gap:1rem}
+.learning-home .topic-link{justify-content:center}
+.learning-home .manifesto-inner{grid-template-columns:minmax(0,1fr);justify-items:center;margin-inline:auto;text-align:center}
+.learning-home .manifesto-inner>div .home-eyebrow{justify-content:center}
+.learning-home .manifesto-inner>div>p:last-child{margin-inline:auto}
+.learning-home .journey-stage{grid-template-columns:minmax(0,1fr);justify-items:center}
+.learning-home .journey-stage .stage-marker{display:none}
+.learning-home .journey-stage .stage-card,.learning-home .journey-stage:nth-of-type(even) .stage-card{grid-column:1;grid-row:auto;width:min(100%,560px);justify-self:center;text-align:center}
+.learning-home .journey-stage .stage-card-head,.learning-home .journey-stage .stage-actions{justify-content:center}
+.learning-home .journey-stage .stage-checklist{display:inline-block;text-align:left}
+.learning-home .journey-curve,.learning-home .journey-sticky-notes{display:none}
+.learning-home .cta-box,.learning-home .faq-heading{text-align:center}
+.learning-home .faq-heading .home-eyebrow{justify-content:center}
+.learning-home .faq-list{margin-inline:auto}
+@media(max-width:800px){.learning-home .home-hero{grid-template-columns:minmax(0,1fr)}}
+
 @plugin "tailwindcss-animate";
 
 /* Conversational learning tutor */

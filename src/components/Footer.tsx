@@ -22,7 +22,7 @@ export default function Footer() {
           </div>
           <div className="footer-links">
             <div><h2>Explore</h2><Link to="/talks">AI topics</Link><Link to="/about">About the project</Link><Link to="/contact">Get in touch</Link></div>
-            <div><h2>Information</h2><a href="/terms">Terms &amp; Conditions</a><a href="/privacy">Privacy Policy</a><a href="/cookies">Cookie Policy</a></div>
+            <div><h2>Information</h2><Link to="/terms">Terms &amp; Conditions</Link><Link to="/privacy">Privacy Policy</Link><Link to="/cookies">Cookie Policy</Link></div>
             <div><h2>Follow along</h2><p>Ideas, learning, and practical ways to use AI.</p><div className="footer-socials">{socialLinks.map(({ label, href }) => <a href={href} key={label} target="_blank" rel="noreferrer">{label}<ArrowUpRight size={13} /></a>)}</div></div>
           </div>
         </div>
