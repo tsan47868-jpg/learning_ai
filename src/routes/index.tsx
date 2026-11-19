@@ -40,7 +40,33 @@ const faqs = [
 
 function HomePage() {
   const journeyRef = useRef<HTMLElement>(null)
+  const heroArtRef = useRef<HTMLDivElement>(null)
   const [journeyProgress, setJourneyProgress] = useState(0)
+
+  // 3D tilt: the hero scene follows the cursor with depth-separated layers.
+  useEffect(() => {
+    const art = heroArtRef.current
+    if (!art) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
+    const tilt = (event: MouseEvent) => {
+      const rect = art.getBoundingClientRect()
+      const x = (event.clientX - rect.left) / rect.width - 0.5
+      const y = (event.clientY - rect.top) / rect.height - 0.5
+      art.style.setProperty('--ry', `${(x * 13).toFixed(2)}deg`)
+      art.style.setProperty('--rx', `${(-y * 9).toFixed(2)}deg`)
+    }
+    const reset = () => {
+      art.style.setProperty('--ry', '0deg')
+      art.style.setProperty('--rx', '0deg')
+    }
+    art.addEventListener('mousemove', tilt)
+    art.addEventListener('mouseleave', reset)
+    return () => {
+      art.removeEventListener('mousemove', tilt)
+      art.removeEventListener('mouseleave', reset)
+    }
+  }, [])
 
   useEffect(() => {
     const section = journeyRef.current
@@ -62,8 +88,10 @@ function HomePage() {
     const targets = document.querySelectorAll<HTMLElement>(
       '.learning-home .section-heading, .learning-home .topic-card, .learning-home .manifesto-inner, .learning-home .journey-heading, .learning-home .closing-cta .cta-box, .learning-home .faq-heading, .learning-home .faq-item',
     )
+    const notes = document.querySelectorAll<HTMLElement>('.learning-home .journey-sticky-note')
     if (!('IntersectionObserver' in window)) {
       targets.forEach((target) => target.classList.add('is-revealed'))
+      notes.forEach((note) => note.classList.add('is-pinned'))
       return
     }
 
@@ -80,7 +108,24 @@ function HomePage() {
       target.classList.add('reveal-on-scroll')
       observer.observe(target)
     })
-    return () => observer.disconnect()
+
+    const noteObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-pinned')
+          noteObserver.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.4 })
+
+    notes.forEach((note) => {
+      note.classList.add('note-armed')
+      noteObserver.observe(note)
+    })
+    return () => {
+      observer.disconnect()
+      noteObserver.disconnect()
+    }
   }, [])
   return (
     <main className="learning-home">
@@ -95,13 +140,17 @@ function HomePage() {
           </div>
           <p className="hero-note">No hype. Just useful skills, learned one step at a time.</p>
         </div>
-        <div className="hero-art" aria-label="Illustration of connected AI tools">
-          <div className="orbit orbit-one" /><div className="orbit orbit-two" />
-          <div className="art-card art-main"><span className="art-kicker">IDEA → IMPACT</span><div className="art-brain">✳</div><strong>Learn it.<br />Build it.</strong><span className="art-caption">AI skills for real life</span></div>
-          <div className="art-chip chip-top"><Sparkles size={16} /> Generative AI</div>
-          <div className="art-chip chip-right"><Workflow size={16} /> Automation</div>
-          <div className="art-chip chip-bottom"><KeyRound size={16} /> APIs</div>
-          <span className="art-spark spark-a">✳</span><span className="art-spark spark-b">✦</span>
+        <div className="hero-art" ref={heroArtRef} aria-label="Illustration of connected AI tools">
+          <div className="hero-3d">
+            <div className="hero-sway">
+              <div className="orbit orbit-one" /><div className="orbit orbit-two" />
+              <div className="art-card art-main"><span className="art-kicker">IDEA → IMPACT</span><div className="art-brain">✳</div><strong>Learn it.<br />Build it.</strong><span className="art-caption">AI skills for real life</span></div>
+              <div className="art-chip chip-top"><Sparkles size={16} /> Generative AI</div>
+              <div className="art-chip chip-right"><Workflow size={16} /> Automation</div>
+              <div className="art-chip chip-bottom"><KeyRound size={16} /> APIs</div>
+              <span className="art-spark spark-a">✳</span><span className="art-spark spark-b">✦</span>
+            </div>
+          </div>
         </div>
       </section>
 
