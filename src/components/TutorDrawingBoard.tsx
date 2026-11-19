@@ -83,14 +83,17 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
   const [activeStroke, setActiveStroke] = useState<ActiveStroke | null>(null)
   const [positions, setPositions] = useState<Record<string, DiagramPoint>>({})
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [selectedMarkId, setSelectedMarkId] = useState<string | null>(null)
   const [camera, setCamera] = useState(() => ({ x: 0, y: 0, width: layout.width, height: layout.height }))
   const dragRef = useRef<{ id: string; offsetX: number; offsetY: number } | null>(null)
+  const markDragRef = useRef<{ id: string; pointer: DiagramPoint; mark: ManualMark } | null>(null)
   const panRef = useRef<{ pointerX: number; pointerY: number; x: number; y: number; scaleX: number; scaleY: number } | null>(null)
   const svgRef = useRef<SVGSVGElement>(null)
 
   useEffect(() => {
     setPositions({})
     setSelectedId(null)
+    setSelectedMarkId(null)
     setMarks([])
     setActiveStroke(null)
     setZoom(100)
@@ -119,6 +122,17 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
     dragRef.current = { id, offsetX: pointer.x - point.x, offsetY: pointer.y - point.y }
     svgRef.current?.setPointerCapture(event.pointerId)
     setSelectedId(id)
+    setSelectedMarkId(null)
+  }
+
+  const beginMarkDrag = (event: ReactPointerEvent<SVGGElement>, mark: ManualMark) => {
+    if (tool !== 'select' || event.button !== 0) return
+    event.preventDefault()
+    event.stopPropagation()
+    markDragRef.current = { id: mark.id, pointer: pointFromEvent(event as unknown as ReactPointerEvent<SVGSVGElement>), mark }
+    svgRef.current?.setPointerCapture(event.pointerId)
+    setSelectedMarkId(mark.id)
+    setSelectedId(null)
   }
 
   const beginPan = (event: ReactPointerEvent<SVGSVGElement>) => {
@@ -164,6 +178,19 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
       } : null)
       return
     }
+    if (markDragRef.current) {
+      const { id, pointer, mark } = markDragRef.current
+      const point = pointFromEvent(event)
+      const dx = point.x - pointer.x
+      const dy = point.y - pointer.y
+      setMarks((current) => current.map((item) => item.id !== id ? item : {
+        ...mark,
+        start: { x: mark.start.x + dx, y: mark.start.y + dy },
+        end: { x: mark.end.x + dx, y: mark.end.y + dy },
+        points: mark.points?.map((entry) => ({ x: entry.x + dx, y: entry.y + dy })),
+      }))
+      return
+    }
     if (!dragRef.current) return
     const pointer = pointFromEvent(event)
     const { id, offsetX, offsetY } = dragRef.current
@@ -206,6 +233,7 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
       setActiveStroke(null)
     }
     dragRef.current = null
+    markDragRef.current = null
     panRef.current = null
   }
 
@@ -279,7 +307,12 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
             onPointerMove={moveNode}
             onPointerUp={finishMark}
             onPointerCancel={finishMark}
-            onClick={() => { if (tool === 'select') setSelectedId(null) }}
+            onClick={(event) => {
+              if (tool === 'select' && (event.target === svgRef.current || (event.target as Element).classList?.contains('tutor-grid-background'))) {
+                setSelectedId(null)
+                setSelectedMarkId(null)
+              }
+            }}
           >
             <defs>
               <pattern id="tutor-grid" width="24" height="24" patternUnits="userSpaceOnUse">
@@ -289,7 +322,7 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="#78a18e" />
               </marker>
             </defs>
-            <rect x={camera.x} y={camera.y} width={camera.width} height={camera.height} fill="url(#tutor-grid)" pointerEvents="none" />
+            <rect className="tutor-grid-background" x={camera.x} y={camera.y} width={camera.width} height={camera.height} fill="url(#tutor-grid)" pointerEvents="none" />
             {activeDiagram.edges.map((edge, index) => {
               const from = getPoint(edge.from)
               const to = getPoint(edge.to)
@@ -360,7 +393,11 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
               )
             })}
             <g className="drawing-board-user-marks" aria-label="Your drawings">
-              {marks.map((mark) => renderMark(mark))}
+              {marks.map((mark) => (
+                <g key={mark.id} className={`drawing-board-mark${selectedMarkId === mark.id ? ' is-selected' : ''}`} onPointerDown={(event) => beginMarkDrag(event, mark)} style={{ cursor: tool === 'select' ? 'move' : 'inherit' }}>
+                  {renderMark(mark)}
+                </g>
+              ))}
               {activeStroke && renderMark(activeStroke, true)}
             </g>
           </svg>
