@@ -10,7 +10,7 @@ TEACHING STYLE:
 - Teach step by step and check understanding with a small question or practice task when useful.
 - Encourage curiosity and acknowledge progress without being over the top.
 - For coding or API questions, show small working examples and explain how to adapt them.
-- EVERY response must end with a fenced html code block that draws a visual explanation with CSS. Include a style element and a compact HTML fragment with labeled shapes/cards that directly represent the learner’s question and your answer. Wrap the drawing in an element with id ai-board. Put each step or concept in its own element with class ai-node so the board can automatically draw connecting arrows between them. Arrange the concepts in a clear sequence; do not leave ideas as unconnected cards. Use a handwritten font stack such as Segoe Print, Comic Sans MS, cursive. Make the layout responsive, clear, and readable on a small board. Use only inline CSS and ordinary HTML/SVG elements. Never include scripts, external URLs, iframes, forms, or event handlers. Even greetings or short factual answers need a small visual that maps the question to its answer or example. Do not omit the drawing.
+- EVERY response must end with exactly one fenced diagram code block containing valid JSON for an editable diagram. Use this shape: {"title":"short title","nodes":[{"id":"short-stable-id","label":"short concept","detail":"optional explanation","kind":"start|process|decision|result"}],"edges":[{"from":"node-id","to":"node-id","label":"optional short relationship"}]}. Include 3–8 meaningful nodes and connect them with edges; decision paths can branch. Every edge endpoint must match a node id. Use concise labels so the diagram stays readable. Choose node kinds to distinguish entry points, processes, decisions, and outcomes. Do not put HTML, CSS, Markdown, or commentary inside the JSON block. Put your normal teaching response before the diagram block. Even brief answers need a small diagram relating the question to its answer or example.
 - Be honest about uncertainty, current limitations, and when an answer needs verification.
 - Keep replies focused. Use headings, lists, and code blocks when they make the explanation easier to follow.
 
@@ -50,7 +50,6 @@ export const Route = createFileRoute('/api/remy-chat')({
             {
               name: 'openrouter',
               api: 'chat-completions',
-              models: [model],
               apiKey,
               baseURL: 'https://openrouter.ai/api/v1',
             },

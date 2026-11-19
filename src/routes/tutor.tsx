@@ -5,6 +5,7 @@ import { Streamdown } from 'streamdown'
 import { useConferenceChat } from '#/lib/conference-ai-hook'
 import type { ConferenceChatMessages } from '#/lib/conference-ai-hook'
 import TutorDrawingBoard from '#/components/TutorDrawingBoard'
+import { parseTutorDiagram, type TutorDiagram } from '#/lib/tutor-diagram'
 
 export const Route = createFileRoute('/tutor')({ component: TutorPage })
 
@@ -51,7 +52,22 @@ function createConversationId() {
     : `tutor-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 }
 
-function findLatestDrawing(messages: ReturnType<typeof useConferenceChat>['messages']) {
+function parseLegacyDrawing(source: string, title: string): TutorDiagram | null {
+  if (typeof DOMParser === 'undefined') return null
+  const document = new DOMParser().parseFromString(source, 'text/html')
+  const labels = [...document.querySelectorAll('.ai-node')]
+    .map((node) => (node.textContent || '').replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+    .slice(0, 16)
+  if (!labels.length) return null
+  return parseTutorDiagram({
+    title,
+    nodes: labels.map((label, index) => ({ id: `legacy-${index}`, label, kind: index === 0 ? 'start' : index === labels.length - 1 ? 'result' : 'process' })),
+    edges: labels.slice(1).map((_, index) => ({ from: `legacy-${index}`, to: `legacy-${index + 1}` })),
+  })
+}
+
+function findLatestDiagram(messages: ReturnType<typeof useConferenceChat>['messages']): TutorDiagram | undefined {
   const reversed = [...messages].reverse()
   for (const [index, message] of reversed.entries()) {
     if (message.role !== 'assistant') continue
@@ -61,8 +77,22 @@ function findLatestDrawing(messages: ReturnType<typeof useConferenceChat>['messa
       .join('\n')
     for (const part of message.parts) {
       if (part.type !== 'text' || !part.content) continue
-      const match = part.content.match(/```(?:html|drawing)\s*([\s\S]*?)```/i)
-      if (match) return match[1].trim()
+      const diagramMatch = part.content.match(/```diagram\s*([\s\S]*?)```/i)
+      if (diagramMatch) {
+        try {
+          const parsed = parseTutorDiagram(JSON.parse(diagramMatch[1].trim()))
+          if (parsed) return parsed
+        } catch {
+          // Ignore malformed generated diagram data and try a legacy drawing.
+        }
+      }
+      const legacyMatch = part.content.match(/```(?:html|drawing)\s*([\s\S]*?)```/i)
+      if (legacyMatch) {
+        const question = reversed.slice(index + 1).find((previous) => previous.role === 'user')
+        const title = question?.parts.filter((item) => item.type === 'text').map((item) => item.content || '').join(' ').slice(0, 80) || 'Learning map'
+        const legacyDiagram = parseLegacyDrawing(legacyMatch[1], title)
+        if (legacyDiagram) return legacyDiagram
+      }
     }
 
     const question = reversed.slice(index + 1).find((previous) => previous.role === 'user')
@@ -82,10 +112,11 @@ function findLatestDrawing(messages: ReturnType<typeof useConferenceChat>['messa
       sentences[1] || 'See how the idea works',
       sentences[2] || 'Apply it with an example',
     ].map((label) => label.replace(/[\[\]"'|<>]/g, '').replace(/\s+/g, ' ').slice(0, 52).trim())
-    const escapeHtml = (value: string) => value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
-    return `<style>
-      *{box-sizing:border-box}.ai-map{font:16px 'Segoe Print','Comic Sans MS',cursive;color:#214b42;max-width:470px;margin:12px auto;display:grid;gap:12px}.ai-step{position:relative;padding:17px 19px;border:1px solid #a8cbbb;border-radius:15px;background:linear-gradient(135deg,#f5fbf5,#e8f3e9);text-align:center;box-shadow:0 8px 20px #214b4210}.ai-step:nth-child(even){background:linear-gradient(135deg,#fffaf0,#fbf3df)}.ai-step b{display:block;margin-bottom:5px;color:#598c7e;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-    </style><div id="ai-board">${labels.map((label, index) => `<div class="ai-node ai-step"><b>${['Question', 'Key idea', 'How it works', 'Example'][index]}</b>${escapeHtml(label)}</div>`).join('')}</div>`
+    return parseTutorDiagram({
+      title: 'How the idea fits together',
+      nodes: labels.map((label, index) => ({ id: `step-${index}`, label, kind: index === 0 ? 'start' : index === labels.length - 1 ? 'result' : 'process' })),
+      edges: labels.slice(1).map((_, index) => ({ from: `step-${index}`, to: `step-${index + 1}` })),
+    }) || undefined
   }
   return undefined
 }
@@ -98,7 +129,7 @@ function TutorPage() {
   const savedActiveChat = history.find((conversation) => conversation.id === activeChatId)
   const { messages, sendMessage, isLoading } = useConferenceChat(activeChatId, savedActiveChat?.messages)
   const [input, setInput] = useState('')
-  const [diagram, setDiagram] = useState<string>()
+  const [diagram, setDiagram] = useState<TutorDiagram>()
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -148,15 +179,16 @@ function TutorPage() {
   }
   const openConversation = (conversation: SavedConversation) => {
     if (isLoading) return
-    setDiagram(findLatestDrawing(conversation.messages))
+    setDiagram(findLatestDiagram(conversation.messages))
     setActiveChatId(conversation.id)
     setMobileHistoryOpen(false)
   }
-  const latestQuestion = [...messages].reverse().find((message) => message.role === 'user')?.parts
-    .filter((part) => part.type === 'text')
-    .map((part) => part.content)
-    .join(' ')
-  const completedDiagram = findLatestDrawing(messages)
+  const latestQuestion = [...messages]
+    .reverse()
+    .filter((message) => message.role === 'user')
+    .map((message) => message.parts.filter((part) => part.type === 'text').map((part) => part.content || '').join(' ').trim())
+    .find((text) => text && !/^(?:Create (?:a new editable diagram|a fresh CSS drawing)|Please redraw the visual for my question,)/i.test(text))
+  const completedDiagram = findLatestDiagram(messages)
   useEffect(() => {
     if (!isLoading && completedDiagram) setDiagram(completedDiagram)
   }, [completedDiagram, isLoading])
@@ -208,7 +240,7 @@ function TutorPage() {
               <span className="message-label">{role === 'assistant' ? 'YOUR TUTOR' : 'YOU'}</span>
               <div className="message-content">{parts.map((part, index) => {
                 if (part.type !== 'text' || !part.content) return null
-                const text = part.content.replace(/```(?:html|drawing)\s*[\s\S]*?```/i, '').trim()
+                const text = part.content.replace(/```diagram\s*[\s\S]*?```/i, '').trim()
                 return text ? <Streamdown key={index}>{text}</Streamdown> : null
               })}</div>
             </article>
@@ -216,9 +248,9 @@ function TutorPage() {
             {isLoading && <div className="tutor-thinking"><span /><span /><span /> Thinking through this with you…</div>}
           </div>
           <TutorDrawingBoard
-            drawing={diagram}
+            diagram={diagram}
             hasQuestion={Boolean(latestQuestion) && !isLoading}
-            onMapQuestion={() => latestQuestion && sendMessage(`Create a fresh CSS drawing for your latest explanation. Return it in one fenced html code block with a style element, one root element id ai-board, and each connected concept in its own element with class ai-node. Arrange them in a sequence so the board can draw arrows between the ideas. Then briefly explain the drawing.`)}
+            onMapQuestion={() => latestQuestion && sendMessage(`Please redraw the visual for my question, “${latestQuestion}”, with a clearer layout or a different example. Keep it editable. Return one fenced diagram code block containing only valid JSON with this structure: {"title":"short title","nodes":[{"id":"stable-id","label":"short node title","detail":"optional short explanation","kind":"start|process|decision|result"}],"edges":[{"from":"node-id","to":"node-id","label":"optional short label"}]}. Use 3–8 nodes, include all edge endpoints, choose a clear flow, and keep labels concise. Then briefly explain the diagram.`)}
           />
         </div>
 

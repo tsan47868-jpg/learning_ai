@@ -1,67 +1,309 @@
-import { useState } from 'react'
-import { Minus, Plus, Scan, WandSparkles } from 'lucide-react'
-
-const STARTER_DRAWING = `<style>
-  * { box-sizing: border-box; }
-  body { margin: 0; padding: 24px; font: 16px 'Segoe Print', 'Comic Sans MS', cursive; color: #214b42; background: #fffefa; }
-  #ai-board { display: grid; gap: 34px; max-width: 470px; margin: auto; }
-  .ai-node { position: relative; padding: 18px; border: 1px solid #a8cbbb; border-radius: 16px; background: linear-gradient(135deg,#f5fbf5,#e8f3e9); text-align: center; box-shadow: 0 8px 20px #214b4210; }
-  .ai-node:nth-child(even) { background: linear-gradient(135deg,#fffaf0,#fbf3df); }
-  .ai-node:not(:last-child)::after { content: ''; position: absolute; left: calc(50% - 1px); bottom: -23px; width: 2px; height: 15px; background: #68a18e; }
-  .ai-node:not(:last-child)::before { content: ''; position: absolute; left: calc(50% - 6px); bottom: -30px; border: 5px solid transparent; border-top-color: #68a18e; }
-  small { display: block; margin-bottom: 5px; color: #598c7e; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-</style>
-<div id="ai-board">
-  <div class="ai-node"><small>Start</small>Your question</div>
-  <div class="ai-node"><small>Understand</small>Key idea</div>
-  <div class="ai-node"><small>See it</small>A clear example</div>
-  <div class="ai-node"><small>Try it</small>Build understanding</div>
-</div>`
+import { useEffect, useMemo, useRef, useState } from 'react'
+import type { PointerEvent as ReactPointerEvent } from 'react'
+import { ArrowRight, Circle, MousePointer2, Minus, Pencil, Plus, Scan, Square, Trash2, Type, WandSparkles } from 'lucide-react'
+import { layoutTutorDiagram, type DiagramPoint, type TutorDiagram } from '#/lib/tutor-diagram'
 
 interface TutorDrawingBoardProps {
-  drawing?: string
+  diagram?: TutorDiagram
   onMapQuestion?: () => void
   hasQuestion: boolean
 }
 
-function makeBoardDocument(drawing: string) {
-  const boardContent = /id=['"]ai-board['"]/i.test(drawing) ? drawing : `<div id="ai-board">${drawing}</div>`
-  const boardStyle = `#ai-board{display:grid!important;grid-template-columns:1fr!important;gap:34px!important;max-width:470px!important;margin:12px auto!important}#ai-board .ai-node{position:relative!important;display:block!important;margin:0!important}#ai-board .ai-node:not(:last-child)::after{content:''!important;display:block!important;position:absolute!important;left:calc(50% - 1px)!important;bottom:-23px!important;width:2px!important;height:15px!important;background:#68a18e!important}#ai-board .ai-node:not(:last-child)::before{content:''!important;display:block!important;position:absolute!important;left:calc(50% - 6px)!important;bottom:-30px!important;border:5px solid transparent!important;border-top-color:#68a18e!important}`
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; font-src 'none'; connect-src 'none'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><style>html,body{min-height:100%;margin:0}body{padding:12px;box-sizing:border-box;background:#fffefa}</style></head><body>${boardContent}<style>body,body *{font-family:'Segoe Print','Comic Sans MS',cursive!important}${boardStyle}</style></body></html>`
+type BoardTool = 'select' | 'pen' | 'rectangle' | 'ellipse' | 'arrow' | 'text'
+
+interface ManualMark {
+  id: string
+  type: Exclude<BoardTool, 'select'>
+  start: DiagramPoint
+  end: DiagramPoint
+  points?: DiagramPoint[]
+  text?: string
 }
 
-export default function TutorDrawingBoard({ drawing, onMapQuestion, hasQuestion }: TutorDrawingBoardProps) {
+interface ActiveStroke extends ManualMark {
+  type: Exclude<BoardTool, 'select' | 'text'>
+  points: DiagramPoint[]
+}
+
+const STARTER_DIAGRAM: TutorDiagram = {
+  title: 'How learning works',
+  nodes: [
+    { id: 'question', label: 'Your question', detail: 'Start with something you want to understand', kind: 'start' },
+    { id: 'idea', label: 'Key idea', detail: 'Break the topic into a clear concept', kind: 'process' },
+    { id: 'example', label: 'See it in action', detail: 'Connect the idea to a concrete example', kind: 'process' },
+    { id: 'practice', label: 'Try it yourself', detail: 'Use what you learned', kind: 'result' },
+  ],
+  edges: [
+    { from: 'question', to: 'idea' },
+    { from: 'idea', to: 'example' },
+    { from: 'example', to: 'practice' },
+  ],
+}
+
+function wrapLabel(label: string, maxLength = 22) {
+  const words = label.split(/\s+/)
+  const lines: string[] = []
+  let line = ''
+  for (const word of words) {
+    const next = line ? `${line} ${word}` : word
+    if (next.length > maxLength && line) {
+      lines.push(line)
+      line = word
+    } else {
+      line = next
+    }
+  }
+  if (line) lines.push(line)
+  return lines.slice(0, 3)
+}
+
+const NODE_COLORS: Record<string, { fill: string; stroke: string }> = {
+  start: { fill: '#e6f3e9', stroke: '#77a891' },
+  process: { fill: '#fffefa', stroke: '#a8cbbb' },
+  decision: { fill: '#fff5dd', stroke: '#c69a4b' },
+  result: { fill: '#eaf1fb', stroke: '#89a7cf' },
+}
+
+const DRAW_TOOLS = [
+  { id: 'select', label: 'Select and move', icon: MousePointer2 },
+  { id: 'pen', label: 'Freehand pen', icon: Pencil },
+  { id: 'rectangle', label: 'Rectangle', icon: Square },
+  { id: 'ellipse', label: 'Ellipse', icon: Circle },
+  { id: 'arrow', label: 'Arrow', icon: ArrowRight },
+  { id: 'text', label: 'Text note', icon: Type },
+] as const
+
+export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion }: TutorDrawingBoardProps) {
   const [zoom, setZoom] = useState(100)
-  const activeDrawing = drawing || STARTER_DRAWING
+  const [tool, setTool] = useState<BoardTool>('select')
+  const [marks, setMarks] = useState<ManualMark[]>([])
+  const [activeStroke, setActiveStroke] = useState<ActiveStroke | null>(null)
+  const [positions, setPositions] = useState<Record<string, DiagramPoint>>({})
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const dragRef = useRef<{ id: string; offsetX: number; offsetY: number } | null>(null)
+  const svgRef = useRef<SVGSVGElement>(null)
+  const activeDiagram = diagram || STARTER_DIAGRAM
+  const layout = useMemo(() => layoutTutorDiagram(activeDiagram), [activeDiagram])
+
+  useEffect(() => {
+    setPositions({})
+    setSelectedId(null)
+    setMarks([])
+    setActiveStroke(null)
+  }, [diagram])
+
+  const getPoint = (id: string) => positions[id] || layout.positions[id]
+  const pointFromEvent = (event: ReactPointerEvent<SVGSVGElement>) => {
+    const bounds = svgRef.current?.getBoundingClientRect()
+    if (!bounds || !bounds.width || !bounds.height) return { x: 0, y: 0 }
+    return {
+      x: ((event.clientX - bounds.left) / bounds.width) * layout.width,
+      y: ((event.clientY - bounds.top) / bounds.height) * layout.height,
+    }
+  }
+
+  const beginDrag = (event: ReactPointerEvent<SVGGElement>, id: string) => {
+    if (tool !== 'select') return
+    if (event.button !== 0) return
+    event.preventDefault()
+    event.stopPropagation()
+    const pointer = pointFromEvent(event as unknown as ReactPointerEvent<SVGSVGElement>)
+    const point = getPoint(id)
+    dragRef.current = { id, offsetX: pointer.x - point.x, offsetY: pointer.y - point.y }
+    svgRef.current?.setPointerCapture(event.pointerId)
+    setSelectedId(id)
+  }
+
+  const moveNode = (event: ReactPointerEvent<SVGSVGElement>) => {
+    if (activeStroke) {
+      const point = pointFromEvent(event)
+      setActiveStroke((stroke) => stroke ? {
+        ...stroke,
+        end: point,
+        points: stroke.type === 'pen' ? [...stroke.points, point] : stroke.points,
+      } : null)
+      return
+    }
+    if (!dragRef.current) return
+    const pointer = pointFromEvent(event)
+    const { id, offsetX, offsetY } = dragRef.current
+    setPositions((current) => ({
+      ...current,
+      [id]: {
+        x: Math.max(0, Math.min(layout.width - layout.nodeWidth, pointer.x - offsetX)),
+        y: Math.max(0, Math.min(layout.height - layout.nodeHeight, pointer.y - offsetY)),
+      },
+    }))
+  }
+
+  const startMark = (event: ReactPointerEvent<SVGSVGElement>) => {
+    if (tool === 'select') return
+    event.preventDefault()
+    const point = pointFromEvent(event)
+    if (tool === 'text') {
+      const text = window.prompt('Add a note to the board')?.trim()
+      if (text) {
+        setMarks((current) => [...current, { id: `${Date.now()}-${Math.random()}`, type: 'text', start: point, end: point, text: text.slice(0, 120) }])
+      }
+      return
+    }
+    const stroke: ActiveStroke = {
+      id: `${Date.now()}-${Math.random()}`,
+      type: tool,
+      start: point,
+      end: point,
+      points: [point],
+    }
+    setActiveStroke(stroke)
+    svgRef.current?.setPointerCapture(event.pointerId)
+  }
+
+  const finishMark = () => {
+    if (activeStroke) {
+      const { start, end } = activeStroke
+      const hasSize = Math.hypot(end.x - start.x, end.y - start.y) > 3 || activeStroke.type === 'pen'
+      if (hasSize) setMarks((current) => [...current, activeStroke])
+      setActiveStroke(null)
+    }
+    dragRef.current = null
+  }
+
+  const renderMark = (mark: ManualMark, preview = false) => {
+    const x = Math.min(mark.start.x, mark.end.x)
+    const y = Math.min(mark.start.y, mark.end.y)
+    const width = Math.abs(mark.end.x - mark.start.x)
+    const height = Math.abs(mark.end.y - mark.start.y)
+    const common = { stroke: '#286b59', strokeWidth: 3, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, opacity: preview ? 0.72 : 1 }
+    if (mark.type === 'pen') {
+      const points = mark.points?.map((point) => `${point.x},${point.y}`).join(' ') || ''
+      return <polyline key={mark.id} points={points} fill="none" {...common} />
+    }
+    if (mark.type === 'rectangle') return <rect key={mark.id} x={x} y={y} width={width} height={height} rx="8" fill="#e6f3e966" {...common} />
+    if (mark.type === 'ellipse') return <ellipse key={mark.id} cx={x + width / 2} cy={y + height / 2} rx={width / 2} ry={height / 2} fill="#fff5dd66" {...common} />
+    if (mark.type === 'arrow') return <line key={mark.id} x1={mark.start.x} y1={mark.start.y} x2={mark.end.x} y2={mark.end.y} fill="none" markerEnd="url(#tutor-arrow)" {...common} />
+    return <text key={mark.id} x={mark.start.x} y={mark.start.y} className="diagram-user-note">{mark.text}</text>
+  }
 
   return (
     <aside className="drawing-board" aria-label="AI learning drawing board">
       <header className="drawing-board-header">
         <div className="drawing-board-title">
           <span><WandSparkles size={17} /></span>
-          <div><p>AI-CREATED VISUAL</p><h2>Drawing board</h2></div>
+          <div><p>LEARNING CANVAS</p><h2>Drawing board</h2></div>
         </div>
         <div className="drawing-board-tools" aria-label="Drawing zoom controls">
           <button type="button" onClick={() => setZoom((value) => Math.max(70, value - 10))} aria-label="Zoom out"><Minus size={15} /></button>
           <span>{zoom}%</span>
           <button type="button" onClick={() => setZoom((value) => Math.min(150, value + 10))} aria-label="Zoom in"><Plus size={15} /></button>
-          <button type="button" onClick={() => setZoom(100)} aria-label="Reset zoom"><Scan size={15} /></button>
+          <button type="button" onClick={() => { setZoom(100); setPositions({}) }} aria-label="Reset zoom and layout"><Scan size={15} /></button>
         </div>
       </header>
-      <div className="drawing-board-caption">
-        {drawing ? 'The tutor drew this to explain its answer' : 'Ask your tutor anything to create a drawing'}
+      <div className="drawing-board-caption">{diagram ? diagram.title : 'Draw freely, or ask your tutor to create a diagram'}</div>
+      <div className="drawing-board-toolbox" role="toolbar" aria-label="Board drawing tools">
+        {DRAW_TOOLS.map(({ id, label, icon: Icon }) => (
+          <button key={id} type="button" className={tool === id ? 'is-active' : ''} onClick={() => setTool(id)} aria-label={label} aria-pressed={tool === id} title={label}>
+            <Icon size={15} />
+          </button>
+        ))}
+        <span className="drawing-board-tool-divider" />
+        <button type="button" onClick={() => setMarks([])} disabled={!marks.length} aria-label="Clear your drawings" title="Clear your drawings"><Trash2 size={15} /></button>
       </div>
       <div className="drawing-board-paper">
-        <iframe
-          className="drawing-board-frame"
-          title="AI-generated CSS drawing"
-          sandbox=""
-          srcDoc={makeBoardDocument(activeDrawing)}
-          style={{ width: `${zoom}%` }}
-        />
+          <svg
+            ref={svgRef}
+            className="diagram-svg"
+            viewBox={`0 0 ${layout.width} ${layout.height}`}
+            role="group"
+            aria-label={`${activeDiagram.title}. Select, draw, or add a note to the board.`}
+            style={{ width: `${zoom}%`, cursor: tool === 'select' ? 'default' : 'crosshair' }}
+            onPointerDown={startMark}
+            onPointerMove={moveNode}
+            onPointerUp={finishMark}
+            onPointerCancel={finishMark}
+            onClick={() => { if (tool === 'select') setSelectedId(null) }}
+          >
+            <defs>
+              <marker id="tutor-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#78a18e" />
+              </marker>
+            </defs>
+            {activeDiagram.edges.map((edge, index) => {
+              const from = getPoint(edge.from)
+              const to = getPoint(edge.to)
+              if (!from || !to) return null
+              const x1 = from.x + layout.nodeWidth / 2
+              const y1 = from.y + layout.nodeHeight / 2
+              const x2 = to.x + layout.nodeWidth / 2
+              const y2 = to.y + layout.nodeHeight / 2
+              const dx = x2 - x1
+              const dy = y2 - y1
+              const distance = Math.max(Math.hypot(dx, dy), 1)
+              const insetX = (dx / distance) * (layout.nodeWidth * 0.43)
+              const insetY = (dy / distance) * (layout.nodeHeight * 0.43)
+              const startX = x1 + insetX
+              const startY = y1 + insetY
+              const endX = x2 - insetX
+              const endY = y2 - insetY
+              return (
+                <g key={`${edge.from}-${edge.to}-${index}`} aria-hidden="true">
+                  <line x1={startX} y1={startY} x2={endX} y2={endY} stroke="#78a18e" strokeWidth="2" markerEnd="url(#tutor-arrow)" />
+                  {edge.label && <text x={(startX + endX) / 2} y={(startY + endY) / 2 - 7} textAnchor="middle" className="diagram-edge-label">{edge.label}</text>}
+                </g>
+              )
+            })}
+            {activeDiagram.nodes.map((node) => {
+              const point = getPoint(node.id)
+              const colors = NODE_COLORS[node.kind || 'process']
+              const labelLines = wrapLabel(node.label)
+              const detailLines = node.detail ? wrapLabel(node.detail, 30).slice(0, 2) : []
+              const labelStartY = layout.nodeHeight / 2 - ((labelLines.length - 1) * 9) - (detailLines.length ? 8 : 0)
+              return (
+                <g
+                  key={node.id}
+                  className={`diagram-node${selectedId === node.id ? ' is-selected' : ''}`}
+                  transform={`translate(${point.x} ${point.y})`}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${node.label}${node.detail ? `: ${node.detail}` : ''}. Drag to move.`}
+                  onPointerDown={(event) => beginDrag(event, node.id)}
+                  onClick={() => setSelectedId(node.id)}
+                  onKeyDown={(event) => {
+                    if (tool !== 'select') return
+                    if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) return
+                    event.preventDefault()
+                    const delta = event.shiftKey ? 24 : 8
+                    const point = getPoint(node.id)
+                    setSelectedId(node.id)
+                    setPositions((current) => ({
+                      ...current,
+                      [node.id]: {
+                        x: Math.max(0, Math.min(layout.width - layout.nodeWidth, point.x + (event.key === 'ArrowRight' ? delta : event.key === 'ArrowLeft' ? -delta : 0))),
+                        y: Math.max(0, Math.min(layout.height - layout.nodeHeight, point.y + (event.key === 'ArrowDown' ? delta : event.key === 'ArrowUp' ? -delta : 0))),
+                      },
+                    }))
+                  }}
+                  style={{ cursor: 'grab' }}
+                >
+                  {node.kind === 'decision' ? (
+                    <polygon points={`${layout.nodeWidth / 2},0 ${layout.nodeWidth},${layout.nodeHeight / 2} ${layout.nodeWidth / 2},${layout.nodeHeight} 0,${layout.nodeHeight / 2}`} fill={colors.fill} stroke={colors.stroke} strokeWidth="2" />
+                  ) : (
+                    <rect x="1" y="1" width={layout.nodeWidth - 2} height={layout.nodeHeight - 2} rx={node.kind === 'start' || node.kind === 'result' ? 30 : 15} fill={colors.fill} stroke={colors.stroke} strokeWidth="2" />
+                  )}
+                  <text x={layout.nodeWidth / 2} y={labelStartY} textAnchor="middle" className="diagram-node-label">
+                    {labelLines.map((line, index) => <tspan key={index} x={layout.nodeWidth / 2} dy={index ? 19 : 0}>{line}</tspan>)}
+                    {detailLines.map((line, index) => <tspan key={`detail-${index}`} x={layout.nodeWidth / 2} dy={index ? 14 : 19} className="diagram-node-detail">{line}</tspan>)}
+                  </text>
+                </g>
+              )
+            })}
+            <g className="drawing-board-user-marks" aria-label="Your drawings">
+              {marks.map((mark) => renderMark(mark))}
+              {activeStroke && renderMark(activeStroke, true)}
+            </g>
+          </svg>
       </div>
       <footer className="drawing-board-footer">
-        <span><i /> {drawing ? 'Drawn from the latest answer' : 'Your AI drawing appears here'}</span>
+        <span><i /> {tool === 'select' ? 'Select a concept or choose a drawing tool' : `Using ${DRAW_TOOLS.find((item) => item.id === tool)?.label}`}</span>
         <button type="button" onClick={onMapQuestion} disabled={!hasQuestion || !onMapQuestion}>Redraw this answer <WandSparkles size={14} /></button>
       </footer>
     </aside>

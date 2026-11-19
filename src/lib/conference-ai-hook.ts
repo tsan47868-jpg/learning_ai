@@ -10,7 +10,7 @@ export const useConferenceChat = (
 ) => {
   const chatOptions = createChatClientOptions({
     threadId,
-    ...(initialMessages?.length ? { initialMessages } : {}),
+    ...(initialMessages?.length ? { initialMessages: [...initialMessages] } : {}),
     connection: fetchServerSentEvents('/api/remy-chat'),
   })
 
@@ -18,5 +18,5 @@ export const useConferenceChat = (
 }
 
 export type ConferenceChatMessages = ReturnType<
-  typeof useConferenceChat
+  typeof useChat
 >['messages']
