@@ -28,14 +28,14 @@ const journeyNotes = [
 ]
 
 const faqs = [
-  { question: 'Do I need a technical background to learn AI?', answer: 'No. Start with the fundamentals and build up gradually. The guides are designed to make the concepts approachable, even if you are new to AI.' },
-  { question: 'Where should I start if I’m new to AI?', answer: 'Begin with AI foundations, then try a practical prompt or small project. From there, explore automations and API setup when you are ready.' },
-  { question: 'What can I use AI for in everyday work?', answer: 'AI can help with brainstorming, drafting, summarizing, research, and repetitive workflows. Always review important outputs and choose tasks where it adds real value.' },
-  { question: 'Do I need to know how to code to set up an AI API?', answer: 'Some coding helps for custom integrations, but you can learn the API basics step by step and use no-code tools for many workflows.' },
-  { question: 'Which AI tools should I use?', answer: 'It depends on your task and preferences. Focus on learning the core ideas first so you can evaluate tools and choose what fits your needs.' },
-  { question: 'How do automations and AI work together?', answer: 'An automation connects steps across your apps; AI can add tasks such as classifying information, drafting text, or extracting details inside that workflow.' },
-  { question: 'Is it safe to share private information with AI tools?', answer: 'Check each service’s privacy settings and policies before sharing data. Avoid sending passwords, sensitive personal details, or confidential information unless you understand how it is handled.' },
-  { question: 'How can I suggest a topic or ask a question?', answer: 'Use the contact page to send a question or suggest a guide. Your ideas help shape what we explore next.' },
+  { question: 'Can I learn AI without a technical background?', answer: 'Absolutely. Start with the foundations, then build up at your own pace. The learning path is designed to make AI approachable for beginners and useful for builders.' },
+  { question: 'What should I learn first: AI basics or prompting?', answer: 'Start with the basics so you understand what AI can and cannot do. Then practise writing prompts and reviewing the results.' },
+  { question: 'How can I use AI in my everyday work?', answer: 'Try it for brainstorming, drafting, summarising, research, or a repetitive task. Review important outputs and keep human judgment in the loop.' },
+  { question: 'Do I need to code to build an AI project?', answer: 'No. You can begin with prompts and no-code tools. Coding becomes useful when you want to customise a project or connect an AI API.' },
+  { question: 'How do I choose the right AI tools?', answer: 'Begin with the task you want to solve. Compare tools by how well they fit your needs, privacy expectations, and workflow.' },
+  { question: 'How do AI and automations work together?', answer: 'Automations connect steps across your apps. AI can add capabilities such as drafting text, sorting information, or extracting details along the way.' },
+  { question: 'What should I keep in mind when using AI responsibly?', answer: 'Protect private information, check outputs for accuracy, and use your own judgment—especially when the result matters.' },
+  { question: 'Can I suggest a topic for a future guide?', answer: 'Yes. Visit the contact page to ask a question or suggest a guide on AI basics, APIs, automations, or a tool you would like us to explore.' },
 ]
 
 function HomePage() {
@@ -104,7 +104,7 @@ function HomePage() {
 
       <section className="closing-cta page-wrap px-4 py-20 sm:py-28"><div className="cta-box"><div><p className="home-eyebrow">Your next step starts here</p><h2>Curious about AI?<br /><em>Let’s make it useful.</em></h2><p>Explore a topic, follow an idea, and build something that makes your day a little easier.</p></div><Link to="/talks" className="home-button">Start exploring <ArrowRight size={17} /></Link><span className="cta-decoration">✳</span></div></section>
       <section className="faq-section page-wrap px-4 py-20 sm:py-24">
-        <div className="faq-heading"><span className="faq-accent"/><h2>Common questions</h2></div>
+        <div className="faq-heading"><p className="home-eyebrow">A little clarity goes a long way</p><h2>Common questions</h2><p>Quick answers to help you find your next step with AI.</p></div>
         <div className="faq-list">{faqs.map(({question,answer})=><details className="faq-item" key={question}><summary>{question}<span className="faq-toggle"><Plus size={13}/></span></summary><p>{answer}</p></details>)}</div>
       </section>
     </main>
