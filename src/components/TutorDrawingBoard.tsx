@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { PointerEvent as ReactPointerEvent } from 'react'
-import { ArrowRight, Circle, MousePointer2, Minus, Pencil, Plus, Scan, Square, Trash2, Type, WandSparkles } from 'lucide-react'
+import { ArrowRight, Circle, Hand, MousePointer2, Minus, Pencil, Plus, Scan, Square, Trash2, Type, WandSparkles } from 'lucide-react'
 import { layoutTutorDiagram, type DiagramPoint, type TutorDiagram } from '#/lib/tutor-diagram'
 
 interface TutorDrawingBoardProps {
@@ -9,11 +9,11 @@ interface TutorDrawingBoardProps {
   hasQuestion: boolean
 }
 
-type BoardTool = 'select' | 'pen' | 'rectangle' | 'ellipse' | 'arrow' | 'text'
+type BoardTool = 'select' | 'pan' | 'pen' | 'rectangle' | 'ellipse' | 'arrow' | 'text'
 
 interface ManualMark {
   id: string
-  type: Exclude<BoardTool, 'select'>
+  type: Exclude<BoardTool, 'select' | 'pan'>
   start: DiagramPoint
   end: DiagramPoint
   points?: DiagramPoint[]
@@ -21,7 +21,7 @@ interface ManualMark {
 }
 
 interface ActiveStroke extends ManualMark {
-  type: Exclude<BoardTool, 'select' | 'text'>
+  type: Exclude<BoardTool, 'select' | 'pan' | 'text'>
   points: DiagramPoint[]
 }
 
@@ -66,6 +66,7 @@ const NODE_COLORS: Record<string, { fill: string; stroke: string }> = {
 
 const DRAW_TOOLS = [
   { id: 'select', label: 'Select and move', icon: MousePointer2 },
+  { id: 'pan', label: 'Pan the infinite board', icon: Hand },
   { id: 'pen', label: 'Freehand pen', icon: Pencil },
   { id: 'rectangle', label: 'Rectangle', icon: Square },
   { id: 'ellipse', label: 'Ellipse', icon: Circle },
@@ -74,32 +75,38 @@ const DRAW_TOOLS = [
 ] as const
 
 export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion }: TutorDrawingBoardProps) {
+  const activeDiagram = diagram || STARTER_DIAGRAM
+  const layout = useMemo(() => layoutTutorDiagram(activeDiagram), [activeDiagram])
   const [zoom, setZoom] = useState(100)
   const [tool, setTool] = useState<BoardTool>('select')
   const [marks, setMarks] = useState<ManualMark[]>([])
   const [activeStroke, setActiveStroke] = useState<ActiveStroke | null>(null)
   const [positions, setPositions] = useState<Record<string, DiagramPoint>>({})
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [camera, setCamera] = useState(() => ({ x: 0, y: 0, width: layout.width, height: layout.height }))
   const dragRef = useRef<{ id: string; offsetX: number; offsetY: number } | null>(null)
+  const panRef = useRef<{ pointerX: number; pointerY: number; x: number; y: number; scaleX: number; scaleY: number } | null>(null)
   const svgRef = useRef<SVGSVGElement>(null)
-  const activeDiagram = diagram || STARTER_DIAGRAM
-  const layout = useMemo(() => layoutTutorDiagram(activeDiagram), [activeDiagram])
 
   useEffect(() => {
     setPositions({})
     setSelectedId(null)
     setMarks([])
     setActiveStroke(null)
+    setZoom(100)
+    setCamera({ x: 0, y: 0, width: layout.width, height: layout.height })
   }, [diagram])
 
   const getPoint = (id: string) => positions[id] || layout.positions[id]
   const pointFromEvent = (event: ReactPointerEvent<SVGSVGElement>) => {
-    const bounds = svgRef.current?.getBoundingClientRect()
-    if (!bounds || !bounds.width || !bounds.height) return { x: 0, y: 0 }
-    return {
-      x: ((event.clientX - bounds.left) / bounds.width) * layout.width,
-      y: ((event.clientY - bounds.top) / bounds.height) * layout.height,
-    }
+    const svg = svgRef.current
+    const screenMatrix = svg?.getScreenCTM()
+    if (!svg || !screenMatrix) return { x: 0, y: 0 }
+    const pointer = svg.createSVGPoint()
+    pointer.x = event.clientX
+    pointer.y = event.clientY
+    const point = pointer.matrixTransform(screenMatrix.inverse())
+    return { x: point.x, y: point.y }
   }
 
   const beginDrag = (event: ReactPointerEvent<SVGGElement>, id: string) => {
@@ -114,7 +121,40 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
     setSelectedId(id)
   }
 
+  const beginPan = (event: ReactPointerEvent<SVGSVGElement>) => {
+    const svg = svgRef.current
+    const screenMatrix = svg?.getScreenCTM()
+    if (!screenMatrix) return
+    event.preventDefault()
+    panRef.current = {
+      pointerX: event.clientX,
+      pointerY: event.clientY,
+      x: camera.x,
+      y: camera.y,
+      scaleX: screenMatrix.a || 1,
+      scaleY: screenMatrix.d || 1,
+    }
+    svg?.setPointerCapture(event.pointerId)
+  }
+
+  const handleCanvasPointerDown = (event: ReactPointerEvent<SVGSVGElement>) => {
+    if (tool === 'pan' || event.button === 1) {
+      beginPan(event)
+      return
+    }
+    startMark(event)
+  }
+
   const moveNode = (event: ReactPointerEvent<SVGSVGElement>) => {
+    if (panRef.current) {
+      const pan = panRef.current
+      setCamera((current) => ({
+        ...current,
+        x: pan.x - (event.clientX - pan.pointerX) / pan.scaleX,
+        y: pan.y - (event.clientY - pan.pointerY) / pan.scaleY,
+      }))
+      return
+    }
     if (activeStroke) {
       const point = pointFromEvent(event)
       setActiveStroke((stroke) => stroke ? {
@@ -130,14 +170,14 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
     setPositions((current) => ({
       ...current,
       [id]: {
-        x: Math.max(0, Math.min(layout.width - layout.nodeWidth, pointer.x - offsetX)),
-        y: Math.max(0, Math.min(layout.height - layout.nodeHeight, pointer.y - offsetY)),
+        x: pointer.x - offsetX,
+        y: pointer.y - offsetY,
       },
     }))
   }
 
   const startMark = (event: ReactPointerEvent<SVGSVGElement>) => {
-    if (tool === 'select') return
+    if (tool === 'select' || tool === 'pan') return
     event.preventDefault()
     const point = pointFromEvent(event)
     if (tool === 'text') {
@@ -166,6 +206,24 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
       setActiveStroke(null)
     }
     dragRef.current = null
+    panRef.current = null
+  }
+
+  const changeZoom = (nextZoom: number) => {
+    const clampedZoom = Math.max(40, Math.min(200, nextZoom))
+    const width = layout.width * 100 / clampedZoom
+    const height = layout.height * 100 / clampedZoom
+    const centerX = camera.x + camera.width / 2
+    const centerY = camera.y + camera.height / 2
+    setZoom(clampedZoom)
+    setCamera({ x: centerX - width / 2, y: centerY - height / 2, width, height })
+  }
+
+  const resetBoardView = () => {
+    setZoom(100)
+    setPositions({})
+    setSelectedId(null)
+    setCamera({ x: 0, y: 0, width: layout.width, height: layout.height })
   }
 
   const renderMark = (mark: ManualMark, preview = false) => {
@@ -192,10 +250,10 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
           <div><p>LEARNING CANVAS</p><h2>Drawing board</h2></div>
         </div>
         <div className="drawing-board-tools" aria-label="Drawing zoom controls">
-          <button type="button" onClick={() => setZoom((value) => Math.max(70, value - 10))} aria-label="Zoom out"><Minus size={15} /></button>
+          <button type="button" onClick={() => changeZoom(zoom - 10)} aria-label="Zoom out"><Minus size={15} /></button>
           <span>{zoom}%</span>
-          <button type="button" onClick={() => setZoom((value) => Math.min(150, value + 10))} aria-label="Zoom in"><Plus size={15} /></button>
-          <button type="button" onClick={() => { setZoom(100); setPositions({}) }} aria-label="Reset zoom and layout"><Scan size={15} /></button>
+          <button type="button" onClick={() => changeZoom(zoom + 10)} aria-label="Zoom in"><Plus size={15} /></button>
+          <button type="button" onClick={resetBoardView} aria-label="Reset zoom and layout"><Scan size={15} /></button>
         </div>
       </header>
       <div className="drawing-board-caption">{diagram ? diagram.title : 'Draw freely, or ask your tutor to create a diagram'}</div>
@@ -209,24 +267,29 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
         <button type="button" onClick={() => setMarks([])} disabled={!marks.length} aria-label="Clear your drawings" title="Clear your drawings"><Trash2 size={15} /></button>
       </div>
       <div className="drawing-board-paper">
-          <svg
+        <svg
             ref={svgRef}
             className="diagram-svg"
-            viewBox={`0 0 ${layout.width} ${layout.height}`}
+            viewBox={`${camera.x} ${camera.y} ${camera.width} ${camera.height}`}
+            preserveAspectRatio="xMidYMid meet"
             role="group"
-            aria-label={`${activeDiagram.title}. Select, draw, or add a note to the board.`}
-            style={{ width: `${zoom}%`, cursor: tool === 'select' ? 'default' : 'crosshair' }}
-            onPointerDown={startMark}
+            aria-label={`${activeDiagram.title}. Use the hand tool to pan, plus drawing tools to add to the infinite board.`}
+            style={{ width: '100%', height: '100%', cursor: tool === 'pan' ? 'grab' : tool === 'select' ? 'default' : 'crosshair' }}
+            onPointerDown={handleCanvasPointerDown}
             onPointerMove={moveNode}
             onPointerUp={finishMark}
             onPointerCancel={finishMark}
             onClick={() => { if (tool === 'select') setSelectedId(null) }}
           >
             <defs>
+              <pattern id="tutor-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1" fill="#c7d9cc" />
+              </pattern>
               <marker id="tutor-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="#78a18e" />
               </marker>
             </defs>
+            <rect x={camera.x} y={camera.y} width={camera.width} height={camera.height} fill="url(#tutor-grid)" pointerEvents="none" />
             {activeDiagram.edges.map((edge, index) => {
               const from = getPoint(edge.from)
               const to = getPoint(edge.to)
@@ -282,7 +345,7 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
                       },
                     }))
                   }}
-                  style={{ cursor: 'grab' }}
+                  style={{ cursor: tool === 'pen' || tool === 'rectangle' || tool === 'ellipse' || tool === 'arrow' || tool === 'text' ? 'crosshair' : 'grab' }}
                 >
                   {node.kind === 'decision' ? (
                     <polygon points={`${layout.nodeWidth / 2},0 ${layout.nodeWidth},${layout.nodeHeight / 2} ${layout.nodeWidth / 2},${layout.nodeHeight} 0,${layout.nodeHeight / 2}`} fill={colors.fill} stroke={colors.stroke} strokeWidth="2" />
@@ -303,7 +366,7 @@ export default function TutorDrawingBoard({ diagram, onMapQuestion, hasQuestion 
           </svg>
       </div>
       <footer className="drawing-board-footer">
-        <span><i /> {tool === 'select' ? 'Select a concept or choose a drawing tool' : `Using ${DRAW_TOOLS.find((item) => item.id === tool)?.label}`}</span>
+        <span><i /> {tool === 'pan' ? 'Drag to move around the infinite board' : tool === 'select' ? 'Select a concept or choose a drawing tool' : `Using ${DRAW_TOOLS.find((item) => item.id === tool)?.label}`}</span>
         <button type="button" onClick={onMapQuestion} disabled={!hasQuestion || !onMapQuestion}>Redraw this answer <WandSparkles size={14} /></button>
       </footer>
     </aside>
