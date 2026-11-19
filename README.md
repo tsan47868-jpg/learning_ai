@@ -1,125 +1,130 @@
-Welcome to your new TanStack Start app!
+# Learning AI
 
-# Getting Started
+A website for learning about AI — part guide site, part hands-on tutor. It pairs a marketing-style learning path with an AI tutor chat that answers questions and draws an editable diagram for every answer.
 
-To run this application:
-
-```bash
-npm install
-npm run dev
-```
-
-# Building For Production
-
-To build this application for production:
-
-```bash
-npm run build
-```
-
-## Styling
-
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-### Removing Tailwind CSS
-
-If you prefer not to use Tailwind CSS:
-
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Remove `@tailwindcss/vite` and `tailwindcss` from `package.json`
-
-
-# Events Example - Haute Pâtisserie 2026
-
-A beautiful pastry conference website built with TanStack Start and Netlify, featuring:
-
-- **Speakers & Sessions**: Managed with content-collections for easy markdown-based content
-- **Conference Schedule**: Day-by-day timeline of all sessions
-- **AI Assistant (Remy)**: An AI-powered chat assistant to help attendees navigate the conference
-- **Elegant Dark Theme**: Custom typography with Playfair Display and copper/gold accents
+Built with [TanStack Start](https://tanstack.com/start) (file-based routing), React 19, Tailwind CSS v4, and [TanStack AI](https://ai.tanstack.com) for streaming chat.
 
 ## Features
 
-### Content Management
-- Speaker profiles with bios, awards, and specialty information
-- Session details with topics, duration, and speaker attribution
-- All content in markdown files using content-collections
+### AI tutor (`/tutor`)
+- Streaming chat with a patient, step-by-step teaching style
+- **Editable diagrams**: every tutor reply ends with a fenced ` ```diagram ` JSON block that is parsed and rendered as a node/edge diagram you can interact with (legacy ` ```html ` / ` ```drawing ` blocks are still supported)
+- Conversation history saved in `localStorage` (key: `learning-ai-tutor-history-v1`) with a sidebar of recent chats
+- Suggested prompts and topic shortcuts for starting out
 
-### AI-Powered Assistance
-- Chat with "Remy" the culinary assistant
-- Search for speakers and sessions by topic
-- Get recommendations based on interests
-- Supports multiple AI providers (Anthropic, OpenAI, Gemini, Ollama)
+### Site
+- Home page with a practical learning path, Build → Grow → Scale journey, and FAQ
+- `/talks` — hub of learning areas (AI foundations, automation, APIs, building, responsible use)
+- `/talks/:slug` — detail pages rendered from markdown content
+- `/speakers`, `/speakers/:slug`, `/schedule` — conference pages kept from the original starter example
+- About, Contact, Terms, Privacy, and Cookies pages
+- Header with light / dark / auto theme toggle (persisted)
 
-### Routes
-- `/` - Home page with featured speakers and sessions
-- `/schedule` - Conference schedule with day-by-day timeline
-- `/speakers` - All speakers grid
-- `/speakers/:slug` - Individual speaker detail page
-- `/talks` - All sessions grid
-- `/talks/:slug` - Individual session detail page
+### Content
+- Speakers and talks are markdown files managed by [content-collections](https://www.content-collections.dev/) with Zod schemas (see `content-collections.ts`)
+- Storybook 10 with Vitest browser tests for component work
 
-## Getting Started
+## Tech stack
+
+| Area | Tools |
+| --- | --- |
+| Framework | TanStack Start, TanStack Router (file-based), React 19, TypeScript |
+| Build | Vite 8, `npm` |
+| Styling | Tailwind CSS v4 (`@tailwindcss/vite`), custom tokens/pages in `src/styles.css` |
+| AI | `@tanstack/ai`, `@tanstack/ai-react`, OpenRouter via `@tanstack/ai-openai/compatible` |
+| Content | `@content-collections/core` + Zod, `marked`, `streamdown` |
+| UI | `lucide-react`, `class-variance-authority`, `tailwind-merge` |
+| Testing | Storybook 10, Vitest (browser mode, Playwright) |
+
+## Getting started
 
 ```bash
-# Create a new project with this example
-npx netlify-cta my-conference --example events
-
-# Navigate to the project
-cd my-conference
-
 # Install dependencies
-pnpm install
+npm install
 
-# Start the development server
-pnpm dev
+# Start the dev server (http://localhost:3000)
+npm run dev
 ```
 
-## AI Configuration
+### Environment variables
 
-To use the AI assistant, set one of the following environment variables:
+Create a `.env.local` file:
 
 ```bash
-# Anthropic (Claude)
-ANTHROPIC_API_KEY=your-key-here
+# Required: key used by the AI tutor
+OPEN_ROUTER_API_KEY=your-openrouter-key
 
-# OpenAI
-OPENAI_API_KEY=your-key-here
-
-# Google Gemini
-GEMINI_API_KEY=your-key-here
-
-# Ollama (local, no API key needed)
-# Just ensure Ollama is running locally
+# Optional: model to use (defaults to openai/gpt-4o-mini)
+OPEN_ROUTER_MODEL=openai/gpt-4o-mini
 ```
 
-The assistant will automatically use the first available provider.
+The tutor works without a key only up to the API route, which returns a `503` if `OPEN_ROUTER_API_KEY` is missing.
 
-## Customization
+### Scripts
 
-### Adding Speakers
-Create a new markdown file in `content/speakers/`:
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Dev server on port 3000 |
+| `npm run build` | Production build |
+| `npm run preview` | Preview the production build |
+| `npm run generate-routes` | Run a Vite build (regenerates `src/routeTree.gen.ts`) |
+| `npm run storybook` | Storybook on port 6006 |
+| `npm run build-storybook` | Build Storybook |
 
-```markdown
----
-name: "Chef Name"
-title: "Executive Pastry Chef"
-specialty: "French Pastry"
-restaurant: "Restaurant Name"
-location: "City, Country"
-headshot: "speakers/chef-name.jpg"
-awards:
-  - "Award 1"
-  - "Award 2"
----
+## Routes
 
-Bio content here...
+| Route | Description |
+| --- | --- |
+| `/` | Home: hero, learning path, journey stages, FAQ |
+| `/talks` | Learning areas hub |
+| `/talks/:slug` | Talk/session detail (from `content/talks/*.md`) |
+| `/tutor` | AI tutor chat with editable diagrams |
+| `/speakers` | Speakers grid (starter example content) |
+| `/speakers/:slug` | Speaker profile (starter example content) |
+| `/schedule` | Conference schedule (starter example content) |
+| `/about`, `/contact`, `/terms`, `/privacy`, `/cookies` | Static pages |
+| `/api/remy-chat` | Server route: SSE chat endpoint (POST) |
+
+## Project structure
+
+```
+learning-ai/
+├── content/
+│   ├── speakers/          # Speaker markdown files
+│   └── talks/             # Talk/session markdown files
+├── src/
+│   ├── routes/            # File-based routes (TanStack Router)
+│   │   ├── __root.tsx     # Root layout
+│   │   ├── tutor.tsx      # AI tutor page
+│   │   └── api.remy-chat.ts  # Chat API (SSE)
+│   ├── components/        # UI (Header, Footer, TutorDrawingBoard, RemyAssistant, …)
+│   ├── lib/               # Chat hook, diagram parsing, utilities
+│   ├── stories/           # Storybook stories
+│   ├── styles.css         # Tailwind entry + design tokens + page styles
+│   └── routeTree.gen.ts   # Generated route tree — do not edit by hand
+├── content-collections.ts # Zod schemas for speaker/talk content
+├── vite.config.ts         # Vite plugins (TanStack Start, Tailwind, content-collections)
+└── tsr.config.json        # TanStack Router config
 ```
 
-### Adding Sessions
-Create a new markdown file in `content/talks/`:
+## How the AI tutor works
+
+1. **Client** — `src/routes/tutor.tsx` uses the `useConferenceChat` hook (`src/lib/conference-ai-hook.ts`), which wraps `useChat` from `@tanstack/ai-react` and streams server-sent events from `/api/remy-chat`.
+2. **Server** — `src/routes/api.remy-chat.ts` validates the request, builds an OpenRouter-backed text adapter, and streams the model response with `chat()` + `toServerSentEventsResponse()`. The system prompt defines the teaching style and the diagram protocol.
+3. **Diagrams** — each reply must end with one fenced block:
+
+   ````markdown
+   ```diagram
+   {"title":"…","nodes":[{"id":"…","label":"…","kind":"start|process|decision|result"}],"edges":[{"from":"…","to":"…"}]}
+   ```
+   ````
+
+   `src/lib/tutor-diagram.ts` parses and validates it; `src/components/TutorDrawingBoard.tsx` renders it. If a reply has no diagram, the page derives a simple one from the answer text. Use the **redraw** action on the board to ask for a clearer layout.
+4. **History** — conversations are saved to `localStorage` and restored on load; each chat gets a title from the first user message.
+
+## Adding content
+
+Create a markdown file in `content/talks/`:
 
 ```markdown
 ---
@@ -135,165 +140,39 @@ topics:
 Session description here...
 ```
 
-## Theme
+Or a speaker in `content/speakers/`:
 
-The example uses a custom dark theme with:
-- **Font**: Playfair Display (display) and Cormorant Garamond (body)
-- **Colors**: Copper and gold accents on a dark charcoal background
-- **Effects**: Elegant card hover animations, grain texture overlay
+```markdown
+---
+name: "Chef Name"
+title: "Executive Pastry Chef"
+specialty: "French Pastry"
+restaurant: "Restaurant Name"
+location: "City, Country"
+headshot: "speakers/chef-name.jpg"
+awards:
+  - "Award 1"
+---
 
-
-
-## Routing
-
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
+Bio content here...
 ```
 
-Then anywhere in your JSX you can use it like so:
+Slugs are generated from `title` (talks) or `name` (speakers). Schemas live in `content-collections.ts`.
 
-```tsx
-<Link to="/about">About</Link>
-```
+## Styling
 
-This will create a link that will navigate to the `/about` route.
+- Tailwind CSS v4 is wired up through `@tailwindcss/vite`; the entry point and custom design tokens are in `src/styles.css`.
+- The theme toggle cycles light → dark → auto (system) and persists the choice in `localStorage` under `theme`.
+- Page-specific styles (home, tutor, topics) live alongside the tokens in `src/styles.css`.
 
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
+## Origin
 
-### Using A Layout
+This project was scaffolded from the TanStack Start starter with the **Storybook** and **events** (pastry conference) add-ons — see `.cta.json`. The conference pages, components (`RemyAssistant`, `SpeakerCard`, `TalkCard`), and content in `content/` are starter material that has since been adapted for Learning AI.
 
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
+## Learn more
 
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-})
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from '@tanstack/react-start'
-
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
-  
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
-  
-  return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+- [TanStack Start](https://tanstack.com/start)
+- [TanStack Router](https://tanstack.com/router)
+- [TanStack AI](https://ai.tanstack.com)
+- [Tailwind CSS](https://tailwindcss.com)
+- [content-collections](https://www.content-collections.dev/)
