@@ -1,22 +1,20 @@
 ---
 name: "Isabella Martinez"
-title: "Head Baker & Founder"
-specialty: "Artisan Bread & Sourdough"
-restaurant: "Madre Masa"
+title: "Responsible AI Lead"
+specialty: "AI Safety, Privacy & Governance"
+company: "Verity AI"
 location: "San Francisco, USA"
 headshot: "speakers/isabella-martinez.jpg"
 awards:
-  - "San Francisco Chronicle Rising Star 2021"
-  - "Bread Bakers Guild of America Master Baker"
-  - "Slow Food Presidium Recognition"
+  - "Responsible AI Leadership Award 2024"
+  - "ACM FAccT Distinguished Paper 2022"
+  - "Women in AI Ethics — Top 100 Influencers"
 ---
 
-Isabella Martinez's love affair with bread began in her grandmother's kitchen in Mexico City, where she learned that bread is more than sustenance — it's culture, community, and love made tangible. That foundation led her on a journey through the world's great bread traditions, ultimately landing at San Francisco's legendary Tartine Bakery.
+Isabella Martinez works on the question every AI team eventually faces: how do we use this responsibly? Her career started in data privacy at a San Francisco fintech, where she saw how quickly well-intentioned data collection could outgrow its original purpose — and how hard it is to claw back once systems are built on it.
 
-During her four years at Tartine, Isabella immersed herself in the art and science of long-fermentation breads. She developed an obsession with understanding the living ecosystems within sourdough starters, eventually cultivating over twenty distinct cultures from around the world, each with unique flavor profiles and characteristics.
+The pivot to AI came during a product review in which a model meant to screen job applicants quietly began penalizing résumés from career changers. Isabella led the effort to find the cause, document it, and rebuild the pipeline with human review in the loop. That project became her template: find the failure, tell the truth about it, and design so the failure cannot quietly recur.
 
-Her technical mastery is matched by her commitment to sustainable sourcing. Isabella works directly with small-scale grain farmers throughout California and Mexico, championing heritage wheat varieties that were nearly lost to industrial agriculture. Her "Oaxacan Heritage Loaf," made with ancestral Mexican wheat and local California grains, has become a symbol of the neo-locavore bread movement.
+She now leads responsible AI practice at Verity AI, where her team runs pre-launch reviews, red-teams new features, and writes the plain-language guidelines that engineers, legal staff, and customers can all read.
 
-Madre Masa, which Isabella founded in 2019 in San Francisco's Mission District, operates as both bakery and community hub. The space hosts weekly bread-making workshops, partners with local food banks, and has become a gathering place for the Bay Area's food community. Her naturally leavened pizza, served only on weekend evenings, regularly draws three-hour waits.
-
-Isabella believes that bread connects us to millennia of human history and that every loaf tells a story of the land, the grain, and the hands that shaped it.
+Isabella teaches that responsibility is not a checklist at the end — it is a habit you build in from the first decision.

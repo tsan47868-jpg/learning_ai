@@ -16,7 +16,8 @@ Built with [TanStack Start](https://tanstack.com/start) (file-based routing), Re
 - Home page with a practical learning path, Build → Grow → Scale journey, and FAQ
 - `/talks` — hub of learning areas (AI foundations, automation, APIs, building, responsible use)
 - `/talks/:slug` — detail pages rendered from markdown content
-- `/speakers`, `/speakers/:slug`, `/schedule` — conference pages kept from the original starter example
+- `/speakers`, `/speakers/:slug` — guides who teach the content
+- `/schedule` — three-day learning schedule following the path
 - About, Contact, Terms, Privacy, and Cookies pages
 - Header with light / dark / auto theme toggle (persisted)
 
@@ -79,9 +80,9 @@ The tutor works without a key only up to the API route, which returns a `503` if
 | `/talks` | Learning areas hub |
 | `/talks/:slug` | Talk/session detail (from `content/talks/*.md`) |
 | `/tutor` | AI tutor chat with editable diagrams |
-| `/speakers` | Speakers grid (starter example content) |
-| `/speakers/:slug` | Speaker profile (starter example content) |
-| `/schedule` | Conference schedule (starter example content) |
+| `/speakers` | Speakers grid |
+| `/speakers/:slug` | Speaker profile |
+| `/schedule` | Three-day learning schedule |
 | `/about`, `/contact`, `/terms`, `/privacy`, `/cookies` | Static pages |
 | `/api/remy-chat` | Server route: SSE chat endpoint (POST) |
 
@@ -109,7 +110,7 @@ learning-ai/
 
 ## How the AI tutor works
 
-1. **Client** — `src/routes/tutor.tsx` uses the `useConferenceChat` hook (`src/lib/conference-ai-hook.ts`), which wraps `useChat` from `@tanstack/ai-react` and streams server-sent events from `/api/remy-chat`.
+1. **Client** — `src/routes/tutor.tsx` uses the `useTutorChat` hook (`src/lib/tutor-ai-hook.ts`), which wraps `useChat` from `@tanstack/ai-react` and streams server-sent events from `/api/remy-chat`.
 2. **Server** — `src/routes/api.remy-chat.ts` validates the request, builds an OpenRouter-backed text adapter, and streams the model response with `chat()` + `toServerSentEventsResponse()`. The system prompt defines the teaching style and the diagram protocol.
 3. **Diagrams** — each reply must end with one fenced block:
 
@@ -129,7 +130,7 @@ Create a markdown file in `content/talks/`:
 ```markdown
 ---
 title: "Session Title"
-speaker: "Chef Name"
+speaker: "Guide Name"
 duration: "90 minutes"
 image: "talks/session-image.jpg"
 topics:
@@ -144,12 +145,12 @@ Or a speaker in `content/speakers/`:
 
 ```markdown
 ---
-name: "Chef Name"
-title: "Executive Pastry Chef"
-specialty: "French Pastry"
-restaurant: "Restaurant Name"
+name: "Guide Name"
+title: "Head of AI Education"
+specialty: "AI Foundations & Prompting"
+company: "Company Name"
 location: "City, Country"
-headshot: "speakers/chef-name.jpg"
+headshot: "speakers/guide-name.jpg"
 awards:
   - "Award 1"
 ---
@@ -167,7 +168,7 @@ Slugs are generated from `title` (talks) or `name` (speakers). Schemas live in `
 
 ## Origin
 
-This project was scaffolded from the TanStack Start starter with the **Storybook** and **events** (pastry conference) add-ons — see `.cta.json`. The conference pages, components (`RemyAssistant`, `SpeakerCard`, `TalkCard`), and content in `content/` are starter material that has since been adapted for Learning AI.
+This project was scaffolded from the TanStack Start starter with the **Storybook** and **events** add-ons — see `.cta.json`. The starter's original example material has since been fully rewritten for Learning AI: the pages, components (`RemyAssistant`, `SpeakerCard`, `TalkCard`), and everything in `content/` now describe the AI learning path.
 
 ## Learn more
 

@@ -1,4 +1,4 @@
-import { ChefHat, ChevronRight } from 'lucide-react'
+import { GraduationCap, ChevronRight } from 'lucide-react'
 import { showRemyAssistant } from './RemyAssistant'
 
 export default function RemyButton() {
@@ -9,7 +9,7 @@ export default function RemyButton() {
       aria-label="Open Remy Assistant"
     >
       <div className="flex items-center gap-2">
-        <ChefHat size={24} />
+        <GraduationCap size={24} />
         <span className="text-sm">Remy</span>
       </div>
       <ChevronRight className="w-4 h-4" />

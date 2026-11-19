@@ -1,22 +1,20 @@
 ---
 name: "Hans Mueller"
-title: "Master Baker"
-specialty: "Viennoiserie & Laminated Doughs"
-restaurant: "Das Brotwerk"
+title: "Principal Platform Engineer"
+specialty: "AI APIs & Integration"
+company: "Alpenlogic"
 location: "Munich, Germany"
 headshot: "speakers/hans-mueller.jpg"
 awards:
-  - "German Master Baker Certification"
-  - "Coupe du Monde de la Boulangerie Silver 2016"
-  - "Austrian Chamber of Commerce Gold Medal"
+  - "German Digital Prize for Engineering 2022"
+  - "Open Source Integration Award 2021"
+  - "TU München Distinguished Alumni"
 ---
 
-Hans Mueller represents the sixth generation of his family to pursue the art of baking, carrying forward a tradition that began in a small Austrian village in 1847. His mastery of laminated doughs — the painstaking process of folding butter into dough to create hundreds of flaky layers — is considered unparalleled in the German-speaking world.
+Hans Mueller connects AI to the software people already use. He began his career as a backend engineer building payment integrations, where he learned the discipline that defines his work today: external services fail, timeouts happen, and the difference between a toy demo and a dependable product is how gracefully you handle both.
 
-Hans's formal training began at age fourteen as an apprentice in his father's bakery in Salzburg. He later refined his skills at the prestigious bakery of the Vienna State Opera, where he spent eight years supplying pastries for intermission service and exclusive galas. The pressure of producing hundreds of perfect croissants and Kipferl daily, with no margin for error, forged his legendary precision.
+For eight years Hans designed the API layers behind a fleet of business applications, then moved into AI specifically because he saw teams copy-pasting API calls without understanding keys, rate limits, retries, or cost. He joined Alpenlogic as a principal engineer and now leads the platform team that keeps AI features running in production — the part of the job that never makes the launch announcement.
 
-What sets Hans apart is his scientific approach to an ancient craft. He has collaborated with food scientists at the Technical University of Munich to study the crystalline structure of butter at various temperatures, the gluten networks in different flour types, and the fermentation kinetics that create flavor. His findings have been published in academic journals and have influenced professional bakers worldwide.
+Hans is a longtime open-source contributor, maintaining a small library for structured error handling that is used in thousands of projects.
 
-Das Brotwerk, his Munich bakery and teaching academy, opened in 2017. The space features a glass-walled production kitchen where visitors can observe the lamination process in real-time. His signature "288-Layer Croissant" — a technical feat requiring three days of preparation — has been called "the platonic ideal of the form" by *Die Zeit*.
-
-Hans is also dedicated to preserving traditional Germanic baking techniques, maintaining an archive of historical recipes and training the next generation in methods that might otherwise be lost.
+He teaches AI integration the way he learned systems engineering: start with the failure cases, keep your keys out of version control, and never let a model call sit between a customer and their data without a timeout.

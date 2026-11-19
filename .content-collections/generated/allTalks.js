@@ -1,163 +1,163 @@
 
 export default [
   {
-    "title": "Croissant Lamination Secrets",
-    "speaker": "Hans Mueller",
-    "duration": "150 minutes",
-    "image": "talks/croissant-lamination-secrets.jpg",
-    "topics": [
-      "Croissants",
-      "Lamination",
-      "Viennoiserie"
-    ],
-    "content": "Hans Mueller opens the door to his glass-walled kitchen for an unprecedented deep dive into laminated dough. This extended masterclass reveals the science, technique, and obsessive attention to detail behind his legendary 288-layer croissant.\n\n## What You'll Learn\n\n**The Science of Lamination**\nHans has collaborated with food scientists to understand exactly what happens during lamination at the molecular level. Learn why butter temperature matters down to the degree, how gluten networks interact with fat layers, and the physics of steam expansion that creates those honeycomb interiors.\n\n**Détrempe: The Foundation**\nThe dough itself sets the stage for everything that follows. Hans demonstrates his approach to mixing, explaining his flour choices, hydration levels, and the brief fermentation that develops flavor without compromising structure.\n\n**The Beurrage: Butter Block Preparation**\nSelecting and preparing butter is where many croissants fail before they've begun. Hans shares his butter blend (yes, he combines varieties), his method for creating a perfectly pliable block, and how to match butter and dough temperatures for seamless integration.\n\n**Folding Technique**\nWatch as Hans performs his signature fold sequence, explaining each turn, each rest period, and how to recognize when your dough is speaking to you. He'll address common problems — butter breaking through, layers merging, uneven thickness — and their solutions.\n\n**Shaping & Proofing**\nFrom rolling the final sheet to cutting perfect triangles and forming the classic crescent shape. Hans discusses proofing temperatures and times, and how to know when your croissants are ready for the oven.\n\n## Live Demonstration\n\nHans will laminate dough in real-time, narrating each step and taking questions. Pre-laminated dough will be available for participants to practice shaping.\n\n## Who Should Attend\n\nThis session is designed for serious pastry professionals and ambitious home bakers who are ready to invest the time required for true mastery. Prior experience with laminated doughs is helpful but not required — only patience and dedication.\n\n*\"The croissant demands everything from the baker — time, precision, attention. In return, it offers transcendence.\"* — Hans Mueller",
-    "_meta": {
-      "filePath": "croissant-lamination-secrets.md",
-      "fileName": "croissant-lamination-secrets.md",
-      "directory": ".",
-      "extension": "md",
-      "path": "croissant-lamination-secrets"
-    },
-    "slug": "croissant-lamination-secrets"
-  },
-  {
-    "title": "French Macaron Mastery",
-    "speaker": "Marie Dubois",
-    "duration": "120 minutes",
-    "image": "talks/french-macaron-mastery.jpg",
-    "topics": [
-      "Macarons",
-      "French Pastry",
-      "Confections"
-    ],
-    "content": "Marie Dubois confronts the pastry world's most temperamental confection: the French macaron. In this comprehensive session, she shares the methods that produce consistent, beautiful macarons at Pâtisserie Célestine — and troubleshoots the many ways they can go wrong.\n\n## What You'll Learn\n\n**Understanding Macaron Science**\nWhy are macarons so finicky? Marie explains the science behind meringue stability, the role of almond flour particle size, and how humidity, temperature, and timing interact to determine success or failure. Understanding the \"why\" makes the \"how\" much easier.\n\n**French vs. Italian Meringue Method**\nMarie demonstrates both approaches, explaining when she chooses each method and why. You'll see the differences in technique, texture, and final result — and understand which approach might suit your kitchen environment.\n\n**The Perfect Macaronage**\nThe moment of folding is where most macarons are won or lost. Marie shares her visual and tactile cues for knowing when the batter has reached the ideal consistency — that magical point between over-mixed and under-mixed.\n\n**Piping & Baking**\nFrom piping uniform circles to achieving the coveted \"feet,\" Marie walks through her entire baking process. Learn her resting times, oven temperatures, and how to adjust for different environments and equipment.\n\n**Filling Philosophy**\nA macaron is only as good as its filling. Marie demonstrates several of her signature ganaches and buttercreams, discussing flavor pairing, texture balance, and how to match filling to shell color and flavor.\n\n## Troubleshooting Workshop\n\nBring your macaron problems to Marie. She'll address common issues — hollow shells, cracked tops, missing feet, lopsided shapes — with specific solutions based on her years of professional production.\n\n## Who Should Attend\n\nAnyone who has ever sworn off macarons after too many failures, professionals looking to add macarons to their offerings, and bakers who want to understand these confections at a deeper level. Intermediate skill level recommended.\n\n*\"The macaron teaches patience and precision. Master it, and every other pastry becomes simpler by comparison.\"* — Marie Dubois",
-    "_meta": {
-      "filePath": "french-macaron-mastery.md",
-      "fileName": "french-macaron-mastery.md",
-      "directory": ".",
-      "extension": "md",
-      "path": "french-macaron-mastery"
-    },
-    "slug": "french-macaron-mastery"
-  },
-  {
-    "title": "Neapolitan Pizza: Tradition Meets Innovation",
-    "speaker": "Isabella Martinez",
-    "duration": "90 minutes",
-    "image": "talks/neapolitan-pizza-tradition-meets-innovation.jpg",
-    "topics": [
-      "Pizza",
-      "Bread",
-      "Italian"
-    ],
-    "content": "Isabella Martinez brings her sourdough expertise to one of the world's most beloved breads: Neapolitan pizza. This session explores how natural fermentation and artisanal approaches can elevate pizza while honoring — and sometimes gently challenging — traditional methods.\n\n## What You'll Learn\n\n**The Neapolitan Foundation**\nBefore innovating, we must understand. Isabella breaks down the AVPN (Associazione Verace Pizza Napoletana) standards and why they exist — the specific flour types, hydration levels, fermentation times, and baking temperatures that define authentic Neapolitan pizza.\n\n**Natural Leavening for Pizza**\nIsabella pioneered the use of sourdough starters in her weekend pizza service at Madre Masa. Learn how she adapted her bread baking experience to pizza, managing fermentation times, adjusting hydration, and developing the complex flavors that set her pizzas apart.\n\n**Working with High Hydration Doughs**\nNeapolitan dough at 65-70% hydration presents unique handling challenges. Isabella demonstrates her approach to mixing, folding, and shaping these wet doughs without deflating or tearing — techniques that translate to any high-hydration bread baking.\n\n**Beyond the Margherita**\nWhile respecting tradition, Isabella explores how the Neapolitan framework can accommodate innovation. Seasonal toppings, unusual cheese selections, and flavor combinations that push boundaries while maintaining the essential character of Neapolitan pizza.\n\n**Home Oven Adaptation**\nNot everyone has access to a 900°F wood-fired oven. Isabella shares her methods for achieving excellent results in home ovens and on outdoor pizza ovens, adapting technique to equipment.\n\n## Live Demonstration\n\nWatch Isabella shape and bake pizzas in real-time, explaining her movements, timing, and decision-making throughout the process.\n\n## Who Should Attend\n\nPizza enthusiasts, bread bakers curious about pizza, and anyone interested in understanding how traditional techniques can be thoughtfully evolved. All skill levels welcome.\n\n*\"Pizza is bread at its most generous — sharing its surface with whatever the season offers.\"* — Isabella Martinez",
-    "_meta": {
-      "filePath": "neapolitan-pizza-tradition-meets-innovation.md",
-      "fileName": "neapolitan-pizza-tradition-meets-innovation.md",
-      "directory": ".",
-      "extension": "md",
-      "path": "neapolitan-pizza-tradition-meets-innovation"
-    },
-    "slug": "neapolitan-pizza-tradition-meets-innovation"
-  },
-  {
-    "title": "Savory Breads of the Mediterranean",
-    "speaker": "André Costa",
-    "duration": "90 minutes",
-    "image": "talks/savory-breads-of-the-mediterranean.jpg",
-    "topics": [
-      "Bread",
-      "Mediterranean",
-      "Savory"
-    ],
-    "content": "André Costa takes you on a journey around the Mediterranean Sea, exploring the savory bread traditions that have sustained cultures for millennia. From Portuguese broa to Moroccan msemen, this session celebrates the diversity and commonality of Mediterranean baking.\n\n## What You'll Learn\n\n**The Mediterranean Grain Tradition**\nAndré explores how geography, climate, and trade shaped bread cultures around the Mediterranean. Understanding these connections helps us appreciate why certain techniques developed in specific regions — and how they can inform our own baking today.\n\n**Portuguese Broa de Milho**\nPortugal's beloved corn bread predates the introduction of wheat and remains a staple of northern Portuguese cuisine. André demonstrates the traditional method, explaining how to achieve the dense, slightly sweet crumb that makes broa the perfect companion for caldo verde.\n\n**Moroccan Msemen**\nThese layered, pan-fried flatbreads share surprising similarities with laminated Viennoiserie — a connection André discovered during his Mediterranean travels. Learn the hand technique for stretching the dough paper-thin and the folding method that creates flaky layers.\n\n**Focaccia Genovese**\nThe art of focaccia lies in the olive oil — its quality, quantity, and application. André shares his approach to this seemingly simple bread, achieving the crispy-bottomed, dimpled, olive-oil-soaked perfection that defines Ligurian tradition.\n\n**Pide & Beyond**\nA brief exploration of Turkish pide and how Eastern Mediterranean traditions connect back to Portuguese influences, completing the circle around the sea.\n\n## Tasting Session\n\nSamples of each bread discussed will be available for participants to taste and compare, understanding how ingredients and technique create distinct regional characters.\n\n## Who Should Attend\n\nIdeal for bakers interested in expanding beyond French and American bread traditions, food historians, and anyone who believes that understanding bread is understanding culture. All skill levels welcome.\n\n*\"The Mediterranean is connected by wheat, water, and olive oil — and by the hands that have shaped bread along its shores for thousands of years.\"* — André Costa",
-    "_meta": {
-      "filePath": "savory-breads-of-the-mediterranean.md",
-      "fileName": "savory-breads-of-the-mediterranean.md",
-      "directory": ".",
-      "extension": "md",
-      "path": "savory-breads-of-the-mediterranean"
-    },
-    "slug": "savory-breads-of-the-mediterranean"
-  },
-  {
-    "title": "Sourdough: From Starter to Masterpiece",
-    "speaker": "Isabella Martinez",
-    "duration": "120 minutes",
-    "image": "talks/sourdough-from-starter-to-masterpiece.jpg",
-    "topics": [
-      "Sourdough",
-      "Bread",
-      "Fermentation"
-    ],
-    "content": "Isabella Martinez invites you into the living world of sourdough — where flour, water, and time create something almost magical. This extended session covers the complete journey from cultivating a starter to pulling a perfectly blistered loaf from the oven.\n\n## What You'll Learn\n\n**Understanding Your Starter**\nIsabella maintains over twenty sourdough cultures from around the world. She'll explain the microbiology behind fermentation, how different flour types and environments create distinct flavor profiles, and share her daily feeding ritual that keeps her starters thriving for years.\n\n**The Science of Fermentation**\nWhy does long fermentation create better bread? Isabella breaks down the enzymatic processes, the development of organic acids, and how time transforms simple ingredients into complex flavors. You'll learn to read the signs that tell you when your dough is ready.\n\n**Shaping & Scoring**\nThe moment of truth: turning a mass of dough into a beautiful loaf. Isabella demonstrates her signature shaping techniques for boules and batards, and reveals how she approaches scoring — treating each loaf as a canvas for artistic expression.\n\n**The Bake**\nFrom oven temperature to steam injection, the final stage determines whether your loaf achieves that coveted ear, the crackled crust, and the open crumb structure. Isabella shares her methods for both professional deck ovens and home Dutch oven baking.\n\n## Hands-On Component\n\nParticipants will work with pre-fermented dough to practice shaping and scoring techniques. Isabella will provide feedback on form and approach.\n\n## Who Should Attend\n\nPerfect for bread enthusiasts at any level who want to deepen their understanding of natural leavening. Whether you're troubleshooting your home starter or looking to add sourdough to your bakery menu, this session provides both scientific grounding and practical wisdom.\n\n*\"Every loaf of sourdough carries within it the history of bread itself — a connection to every baker who came before.\"* — Isabella Martinez",
-    "_meta": {
-      "filePath": "sourdough-from-starter-to-masterpiece.md",
-      "fileName": "sourdough-from-starter-to-masterpiece.md",
-      "directory": ".",
-      "extension": "md",
-      "path": "sourdough-from-starter-to-masterpiece"
-    },
-    "slug": "sourdough-from-starter-to-masterpiece"
-  },
-  {
-    "title": "The Art of the Perfect Tart",
+    "title": "AI Foundations: How Models Actually Work",
     "speaker": "Marie Dubois",
     "duration": "90 minutes",
-    "image": "talks/the-art-of-the-perfect-tart.jpg",
+    "image": "talks/ai-foundations-how-models-actually-work.jpg",
     "topics": [
-      "Tarts",
-      "French Pastry",
-      "Technique"
+      "AI Basics",
+      "Machine Learning",
+      "Generative AI"
     ],
-    "content": "Join Marie Dubois for an immersive journey into the soul of French pâtisserie — the tart. In this masterclass, Marie will reveal the techniques that have made her Tarte Céleste a destination dessert, breaking down each component from crust to crown.\n\n## What You'll Learn\n\n**The Foundation: Pâte Sucrée & Pâte Sablée**\nMarie will demonstrate her approach to creating two essential tart doughs. You'll understand why she chills her butter to exactly 4°C, how to achieve the ideal \"sandy\" texture in sablée, and the resting times that separate good crusts from transcendent ones.\n\n**Blind Baking Perfection**\nThe difference between a soggy bottom and a crisp, golden shell lies in technique. Marie shares her method for achieving uniform baking, including her unconventional approach to pie weights and her timing secrets.\n\n**Filling Philosophy**\nFrom silky pastry cream to fresh fruit arrangements, Marie discusses how to balance flavors, textures, and visual appeal. She'll prepare her signature fig and honey lavender cream filling live, explaining each decision along the way.\n\n**Assembly & Finishing**\nThe final touches transform a tart from homemade to haute cuisine. Learn Marie's glazing techniques, her approach to garnishing, and how she creates the signature \"Célestine\" finish.\n\n## Who Should Attend\n\nThis session is ideal for pastry professionals looking to refine their technique, serious home bakers ready to elevate their craft, and anyone who believes that the tart is the highest expression of French pastry artistry. Intermediate skill level recommended.\n\n*\"A tart is not a vessel for filling — it is a complete composition where every element must sing in harmony.\"* — Marie Dubois",
+    "content": "Marie Dubois opens the learning path with the session everything else builds on: what an AI model really is, what it can do, and where it quietly goes wrong. No math background required — just curiosity and a willingness to unlearn a few things you have read online.\n\n## What You'll Learn\n\n**Models, Not Magic**\nMarie explains what happens when a model \"answers\" a question: it predicts likely text from patterns it saw during training. That single idea resolves most myths — why AI can sound confident while being wrong, and why it never truly \"looks things up\" unless you build that in.\n\n**Training vs. Using**\nYou will see the difference between training a model and prompting one, why most learners only ever do the second, and what that means for the answers you get. Analogy: training is writing the textbook; prompting is asking a student a question.\n\n**Where the Limits Are**\nMarie walks through the failure modes you will meet in real work — stale knowledge, invented details, brittle reasoning on long tasks — and the habit that catches them: treating the output as a draft, never as a source.\n\n**A Shared Vocabulary**\nTokens, parameters, context windows, hallucination. By the end you will use these words precisely, which turns every later conversation about AI from intimidating to ordinary.\n\n## Who Should Attend\n\nComplete beginners, curious professionals, and anyone who has used a chatbot but never understood what was happening behind it. No technical background needed.\n\n*\"You do not need to understand engines to drive — but you should know what is under the hood, and when to check the oil.\"* — Marie Dubois",
     "_meta": {
-      "filePath": "the-art-of-the-perfect-tart.md",
-      "fileName": "the-art-of-the-perfect-tart.md",
+      "filePath": "ai-foundations-how-models-actually-work.md",
+      "fileName": "ai-foundations-how-models-actually-work.md",
       "directory": ".",
       "extension": "md",
-      "path": "the-art-of-the-perfect-tart"
+      "path": "ai-foundations-how-models-actually-work"
     },
-    "slug": "the-art-of-the-perfect-tart"
+    "slug": "ai-foundations-how-models-actually-work"
   },
   {
-    "title": "The Science of Sugar",
-    "speaker": "Priya Sharma",
-    "duration": "90 minutes",
-    "image": "talks/the-science-of-sugar.jpg",
-    "topics": [
-      "Molecular Gastronomy",
-      "Sugar Work",
-      "Science"
-    ],
-    "content": "Priya Sharma merges her biochemistry background with pastry artistry to demystify sugar — the ingredient that defines confectionery. This session transforms abstract chemistry into practical knowledge that will change how you approach every sweet creation.\n\n## What You'll Learn\n\n**Sugar States & Stages**\nFrom thread to hard crack, sugar undergoes dramatic transformations as temperature rises. Priya explains exactly what's happening at the molecular level during each stage, why precise temperature control matters, and how to recognize stages by sight and sound when your thermometer fails.\n\n**Crystallization: Friend and Foe**\nSometimes we want crystals (fondant, fudge); sometimes we don't (caramel, hard candy). Priya explores the science of nucleation and crystal growth, teaching you how to encourage or prevent crystallization intentionally rather than by accident.\n\n**Caramelization Chemistry**\nThe browning of sugar involves hundreds of chemical reactions creating thousands of flavor compounds. Priya breaks down this complexity into understandable principles, explaining why dry caramel differs from wet, why added ingredients change the process, and how to achieve specific flavor profiles.\n\n**Modern Sugar Techniques**\nFrom isomalt for humidity-resistant sugar work to glucose syrup for flexibility, Priya explores the modern pastry chef's expanded sugar toolkit. She demonstrates techniques including sugar glass, pulled sugar basics, and her signature \"sugar clouds\" — impossibly thin, shattered caramel sheets.\n\n**Sugar Alternatives & Reductions**\nHow do alternative sweeteners behave differently from sucrose? Priya discusses the chemistry of honey, maple, coconut sugar, and modern alternatives, and how to adjust recipes when reducing sugar content without sacrificing texture.\n\n## Live Demonstrations\n\nWatch Priya work sugar through multiple stages, creating components for her signature desserts while explaining the science in real-time.\n\n## Who Should Attend\n\nPastry professionals who want to understand their most important ingredient at a deeper level, curious bakers tired of following sugar recipes blindly, and anyone who has ever overcooked caramel and wondered exactly where they went wrong. All skill levels welcome.\n\n*\"Sugar is not merely sweet — it is structure, texture, color, and flavor. Understanding its chemistry unlocks infinite possibilities.\"* — Priya Sharma",
-    "_meta": {
-      "filePath": "the-science-of-sugar.md",
-      "fileName": "the-science-of-sugar.md",
-      "directory": ".",
-      "extension": "md",
-      "path": "the-science-of-sugar"
-    },
-    "slug": "the-science-of-sugar"
-  },
-  {
-    "title": "Umami in Pastry: East Meets West",
+    "title": "Automate Your Repetitive Work",
     "speaker": "Kenji Nakamura",
     "duration": "90 minutes",
-    "image": "talks/umami-in-pastry-east-meets-west.jpg",
+    "image": "talks/automate-your-repetitive-work.jpg",
     "topics": [
-      "Japanese",
-      "French Fusion",
-      "Innovation"
+      "Automation",
+      "Workflows",
+      "Productivity"
     ],
-    "content": "Kenji Nakamura challenges the Western assumption that desserts must be purely sweet. In this boundary-pushing session, he reveals how umami — the fifth taste — can add depth, complexity, and surprise to pastry in ways that delight rather than confuse.\n\n## What You'll Learn\n\n**Understanding Umami in Sweet Contexts**\nUmami isn't new to desserts — it's in caramel's maillard compounds, in aged cheeses paired with honey, in chocolate's fermented origins. Kenji reframes how we think about savory-sweet intersections, building a vocabulary for intentional umami use in pastry.\n\n**The Japanese Ingredient Palette**\nFrom white miso to toasted nori, from dashi to fermented black beans, Japanese cuisine offers a rich array of umami-forward ingredients. Kenji demonstrates how to introduce these flavors at levels that intrigue rather than overwhelm — the subtle art of restraint.\n\n**Miso Caramel: A Case Study**\nKenji walks through his signature miso caramel, explaining ingredient ratios, cooking temperatures, and the balance point where salinity and umami enhance sweetness. This versatile sauce becomes a gateway to understanding umami integration.\n\n**Matcha Beyond Green**\nCeremonial-grade matcha offers more than color and bitterness. Kenji explores its umami character and demonstrates applications in cream, ganache, and his signature millefeuille — showing how proper matcha use differs from the commodity powder found in most Western applications.\n\n**Fermentation in Desserts**\nDrawing on Japanese traditions of fermented foods, Kenji discusses how controlled fermentation can add complexity to pastry components, from amazake-sweetened creams to koji-aged nut pralines.\n\n## Tasting Experience\n\nParticipants will taste a progression of Kenji's creations, from subtle umami accents to more pronounced expressions, understanding how different applications affect perception.\n\n## Who Should Attend\n\nAdventurous pastry professionals, chefs interested in cross-cultural fusion, and anyone curious about expanding the flavor possibilities of dessert. Open minds required; open palates will follow.\n\n*\"Umami is not about making desserts savory — it is about making them complete.\"* — Kenji Nakamura",
+    "content": "Kenji Nakamura has spent a career making boring work disappear. In this session he shows how to find the tasks worth automating, design workflows that survive real life, and add AI exactly where it helps — without building something fragile you will quietly abandon in a month.\n\n## What You'll Learn\n\n**Pick the Right Task**\nNot everything repetitive is worth automating. Kenji shares his filter: frequent, rule-based, reversible, and low-judgment. If a task fails one of those tests, it probably wants a human, a checklist, or no change at all.\n\n**Map Before You Build**\nBefore touching a tool, you will sketch a workflow as a simple chain: trigger, steps, decisions, outcome. Kenji shows why this ten-minute habit prevents the classic failure of automating the wrong thing very efficiently.\n\n**Where AI Fits**\nAI earns its place in the steps that need judgment on messy input — summarizing, classifying, drafting, extracting. Kenji demonstrates each pattern on a realistic example: turning a messy inbox into a prioritized action list.\n\n**Keep a Human in the Loop**\nKenji's rule for first versions: automate the suggestion, not the action. Approval steps, logs, and an off-switch come first; full autonomy is something a workflow earns.\n\n## Who Should Attend\n\nAnyone who repeats the same digital tasks weekly — operations, marketing, admin, support, or solo builders. No coding required for the core patterns.\n\n*\"Automate the dull parts, keep the judgement parts, and measure the hours you get back.\"* — Kenji Nakamura",
     "_meta": {
-      "filePath": "umami-in-pastry-east-meets-west.md",
-      "fileName": "umami-in-pastry-east-meets-west.md",
+      "filePath": "automate-your-repetitive-work.md",
+      "fileName": "automate-your-repetitive-work.md",
       "directory": ".",
       "extension": "md",
-      "path": "umami-in-pastry-east-meets-west"
+      "path": "automate-your-repetitive-work"
     },
-    "slug": "umami-in-pastry-east-meets-west"
+    "slug": "automate-your-repetitive-work"
+  },
+  {
+    "title": "Build a Useful AI Chatbot",
+    "speaker": "André Costa",
+    "duration": "120 minutes",
+    "image": "talks/build-a-useful-ai-chatbot.jpg",
+    "topics": [
+      "Build with AI",
+      "Projects",
+      "Prototyping"
+    ],
+    "content": "André Costa's signature session: in one afternoon you build a chatbot that answers real questions about something you care about — and deploy it where other people can use it. The goal is not a demo. It is a small, finished, useful thing.\n\n## What You'll Learn\n\n**Start With the Question, Not the Code**\nAndré begins where successful projects begin: who will use this, what will they ask, and what does a good answer look like? You will write five real questions before writing any code — and those questions become your test set.\n\n**Grounding: Giving the Bot Your Knowledge**\nA general chatbot knows everything and your context. You will add your own documents or pages, keep answers tied to them, and add the honest fallback: \"I don't have that information.\" Simple retrieval, explained without jargon.\n\n**The Conversation Loop**\nYou will build the parts that make a bot feel usable: remembering the current conversation, handling a message that arrived empty, staying on topic, and knowing when to hand off to a person.\n\n**Ship It and Iterate**\nAndré deploys the bot so it has a real URL, then walks through what changes once strangers use it — the questions you never imagined, and how each one becomes a small improvement.\n\n## Who Should Attend\n\nPeople who have completed the foundations sessions and want a project to show for it. Some coding helps, but André provides a complete starter template either way.\n\n*\"Ship the smallest version that helps someone. Everything you learn next comes from using it.\"* — André Costa",
+    "_meta": {
+      "filePath": "build-a-useful-ai-chatbot.md",
+      "fileName": "build-a-useful-ai-chatbot.md",
+      "directory": ".",
+      "extension": "md",
+      "path": "build-a-useful-ai-chatbot"
+    },
+    "slug": "build-a-useful-ai-chatbot"
+  },
+  {
+    "title": "Evaluate and Improve AI Output",
+    "speaker": "Priya Sharma",
+    "duration": "75 minutes",
+    "image": "talks/evaluate-and-improve-ai-output.jpg",
+    "topics": [
+      "Evaluation",
+      "Quality",
+      "Iteration"
+    ],
+    "content": "Priya Sharma teaches the skill that separates AI users from AI professionals: judging output systematically instead of shrugging at it. If you have ever thought \"this is… fine, I guess\" — this session gives you a better answer than guesswork.\n\n## What You'll Learn\n\n**Define \"Good\" Before You Test**\nPriya shows how to turn a vague wish (\"the summary should be good\") into checkable criteria: coverage, accuracy, tone, length. Ten minutes of definition saves hours of re-rolling and hoping.\n\n**Build a Tiny Test Set**\nYou will collect ten real inputs and record what a correct output looks like for each. This becomes your personal benchmark — the same idea professional teams use, sized for one person.\n\n**Spot the Failure Patterns**\nPriya catalogs the recurring ways models fail — confident wrong facts, drifted format, ignored instructions, sycophantic agreement — and the specific check that catches each one.\n\n**Iterate With Evidence**\nArmed with failures, you will fix prompts where it actually helps, add examples where wording is the problem, and accept when the model is simply the wrong tool for the job.\n\n## Who Should Attend\n\nPractical AI users who ship real work and want to trust it more — writers, analysts, developers, and team leads. Beginner-friendly statistics-free approach.\n\n*\"You cannot improve what you have never measured. And you do not need a lab to measure ten examples.\"* — Priya Sharma",
+    "_meta": {
+      "filePath": "evaluate-and-improve-ai-output.md",
+      "fileName": "evaluate-and-improve-ai-output.md",
+      "directory": ".",
+      "extension": "md",
+      "path": "evaluate-and-improve-ai-output"
+    },
+    "slug": "evaluate-and-improve-ai-output"
+  },
+  {
+    "title": "Keep Exploring: Choosing Tools and Learning Next",
+    "speaker": "Priya Sharma",
+    "duration": "60 minutes",
+    "image": "talks/keep-exploring-choosing-tools-and-learning-next.jpg",
+    "topics": [
+      "Keep Exploring",
+      "Tooling",
+      "Learning Path"
+    ],
+    "content": "The AI tool landscape changes monthly, and Priya Sharma's final session is about navigating it without drowning. Learn to evaluate new tools calmly, decide what is worth adopting, and build a learning routine that keeps up without burning you out.\n\n## What You'll Learn\n\n**Filter the Noise**\nNew models and tools launch constantly, each with a demo that looks miraculous. Priya shares a durable filter — start from the task you have, not the feature being marketed — that survives every release cycle.\n\n**A One-Page Tool Evaluation**\nYou will practice a quick scorecard: does it fit your actual task, what does it cost, where does your data go, and can you leave easily? Five questions that end most \"should we adopt this?\" debates.\n\n**Adopt Deliberately**\nPriya shows how to trial a tool safely on something unimportant, decide with a real week of use instead of first impressions, and keep an exit path so no single tool owns your workflow.\n\n**A Learning Routine That Lasts**\nFinally: how professionals keep current — a handful of trusted sources, one project in progress at all times, and the discipline of ignoring the rest without guilt.\n\n## Who Should Attend\n\nAnyone completing the learning path who wants to continue independently. Ideal as a closing session — you leave with a scorecard, a routine, and a next step.\n\n*\"The goal was never to know every tool. It is to never be lost when the tools change.\"* — Priya Sharma",
+    "_meta": {
+      "filePath": "keep-exploring-choosing-tools-and-learning-next.md",
+      "fileName": "keep-exploring-choosing-tools-and-learning-next.md",
+      "directory": ".",
+      "extension": "md",
+      "path": "keep-exploring-choosing-tools-and-learning-next"
+    },
+    "slug": "keep-exploring-choosing-tools-and-learning-next"
+  },
+  {
+    "title": "Prompting for Reliable Results",
+    "speaker": "Marie Dubois",
+    "duration": "60 minutes",
+    "image": "talks/prompting-for-reliable-results.jpg",
+    "topics": [
+      "Prompting",
+      "Practical Skills",
+      "Workflows"
+    ],
+    "content": "A good prompt is not magic words — it is a clear brief. In this session Marie Dubois turns prompting from superstition into a repeatable skill you can apply to any model, in any tool, starting today.\n\n## What You'll Learn\n\n**The Anatomy of a Prompt**\nMarie breaks every effective prompt into four parts: the role you give the model, the context it needs, the task you actually want, and the shape of the output. Once you can name these parts, you stop guessing and start constructing.\n\n**Context Is the Whole Game**\nMost weak answers come from questions the model could not answer well. Marie shows how a few sentences of context — who the audience is, what you already tried, what \"good\" looks like — change results more than any clever phrasing.\n\n**Show the Output You Want**\nOne worked example outperforms three paragraphs of description. You will practice giving examples, specifying format and length, and asking for the response you need the first time.\n\n**Iterate Instead of Restarting**\nRather than rewriting from scratch, learn to push a response: \"shorter,\" \"more formal,\" \"just the steps.\" Marie demonstrates a full iteration loop from vague request to usable result in four turns.\n\n## Who Should Attend\n\nAnyone who uses AI for writing, planning, research, or code and wants steadier results. Beginner-friendly, with plenty for experienced users to sharpen.\n\n*\"The model is not the variable you cannot control. Your clarity is the variable you can.\"* — Marie Dubois",
+    "_meta": {
+      "filePath": "prompting-for-reliable-results.md",
+      "fileName": "prompting-for-reliable-results.md",
+      "directory": ".",
+      "extension": "md",
+      "path": "prompting-for-reliable-results"
+    },
+    "slug": "prompting-for-reliable-results"
+  },
+  {
+    "title": "Responsible AI in Practice",
+    "speaker": "Isabella Martinez",
+    "duration": "90 minutes",
+    "image": "talks/responsible-ai-in-practice.jpg",
+    "topics": [
+      "Responsible Use",
+      "Privacy",
+      "Human Review"
+    ],
+    "content": "Isabella Martinez replaces vague advice about \"using AI responsibly\" with habits you can apply on Monday morning. This session is about the practical decisions — what to feed a model, what to check, and when to keep a human firmly in the loop.\n\n## What You'll Learn\n\n**Privacy: What Leaves Your System**\nIsabella shows how to think about what you paste into AI tools — customer data, personal details, company secrets — and simple alternatives: anonymize first, summarize instead of sharing, and know your tool's data policy before you type.\n\n**Accuracy: Verify What Matters**\nNot every output deserves the same scrutiny. Isabella introduces a risk-based check: low-stakes brainstorming needs a glance; anything factual, financial, medical, or public needs a source and a second look. You will build your own quick verification habit.\n\n**Bias and Fairness in Real Decisions**\nUsing a hiring screening example, Isabella demonstrates how bias enters through data and task design, and the safeguards that catch it — diverse test cases, human review on consequential decisions, and documented criteria.\n\n**Keep Judgment Where It Belongs**\nThe closing framework: automate drafting and sorting, but keep responsibility — the decision and the signature — with a person who can explain them.\n\n## Who Should Attend\n\nEveryone using AI in real work, especially team leads, and anyone asked to write or review an AI usage policy. No technical background required.\n\n*\"Responsible is not a paragraph in a policy. It is the small decision you make every time before you hit send.\"* — Isabella Martinez",
+    "_meta": {
+      "filePath": "responsible-ai-in-practice.md",
+      "fileName": "responsible-ai-in-practice.md",
+      "directory": ".",
+      "extension": "md",
+      "path": "responsible-ai-in-practice"
+    },
+    "slug": "responsible-ai-in-practice"
+  },
+  {
+    "title": "Set Up Your First AI API",
+    "speaker": "Hans Mueller",
+    "duration": "105 minutes",
+    "image": "talks/set-up-your-first-ai-api.jpg",
+    "topics": [
+      "AI API Setup",
+      "Integration",
+      "Configuration"
+    ],
+    "content": "Hans Mueller walks you from a blank terminal to a working AI feature. This is the session where \"someday I'll build with AI\" becomes a request you made yourself, with a response your own code received — keys, errors, and all.\n\n## What You'll Learn\n\n**Keys, Models, and Requests**\nHans explains the three concepts that trip up every beginner: API keys (how you authenticate), model names (what you call), and request shape (what you send). You will create a key, make a first call, and read the response line by line.\n\n**Your First Working Example**\nYou will build a minimal, complete example: a script that sends a prompt and prints the answer. Hans keeps the code short on purpose — every line is something he can explain.\n\n**Errors Are Information**\nRate limits, invalid keys, timeouts, model-not-found: Hans triggers each one deliberately and shows what it means. Most \"AI is broken\" moments are a status code telling you exactly what to fix.\n\n**Cost, Limits, and Safety**\nYou will learn to track token usage, estimate spend before it surprises you, and handle keys safely — environment variables, never committed code, and rotation when one leaks.\n\n## Who Should Attend\n\nDevelopers new to AI APIs and technical beginners who know a little programming. Bring a laptop; leave with a working request and the confidence to read the docs alone.\n\n*\"Every integration expert has seen the same error messages as you. The difference is they know the error is halfway to the answer.\"* — Hans Mueller",
+    "_meta": {
+      "filePath": "set-up-your-first-ai-api.md",
+      "fileName": "set-up-your-first-ai-api.md",
+      "directory": ".",
+      "extension": "md",
+      "path": "set-up-your-first-ai-api"
+    },
+    "slug": "set-up-your-first-ai-api"
   }
 ]

@@ -4,9 +4,9 @@ import {
   createChatClientOptions,
 } from '@tanstack/ai-react'
 
-export const useConferenceChat = (
+export const useTutorChat = (
   threadId = 'learning-ai-tutor',
-  initialMessages?: ConferenceChatMessages,
+  initialMessages?: TutorChatMessages,
 ) => {
   const chatOptions = createChatClientOptions({
     threadId,
@@ -17,6 +17,4 @@ export const useConferenceChat = (
   return useChat(chatOptions)
 }
 
-export type ConferenceChatMessages = ReturnType<
-  typeof useChat
->['messages']
+export type TutorChatMessages = ReturnType<typeof useChat>['messages']

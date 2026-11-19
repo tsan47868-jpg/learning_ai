@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
-import { Send, X, ChefHat, Croissant } from 'lucide-react'
+import { Send, X, Sparkles, GraduationCap } from 'lucide-react'
 import { Streamdown } from 'streamdown'
 import { Store } from '@tanstack/store'
 
-import { useConferenceChat } from '#/lib/conference-ai-hook'
-import type { ConferenceChatMessages } from '#/lib/conference-ai-hook'
+import { useTutorChat } from '#/lib/tutor-ai-hook'
+import type { TutorChatMessages } from '#/lib/tutor-ai-hook'
 
-function Messages({ messages }: { messages: ConferenceChatMessages }) {
+function Messages({ messages }: { messages: TutorChatMessages }) {
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -20,8 +20,8 @@ function Messages({ messages }: { messages: ConferenceChatMessages }) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center text-cream/60 text-sm px-6 py-8">
         <div className="relative mb-4">
-          <ChefHat className="w-12 h-12 text-copper/60 animate-pulse" />
-          <Croissant className="w-6 h-6 text-gold/60 absolute -bottom-1 -right-1" />
+          <GraduationCap className="w-12 h-12 text-copper/60 animate-pulse" />
+          <Sparkles className="w-6 h-6 text-gold/60 absolute -bottom-1 -right-1" />
         </div>
         <p className="text-center text-cream/80 font-medium font-display text-lg">
           Hi! I’m your AI tutor ✨
@@ -50,7 +50,7 @@ function Messages({ messages }: { messages: ConferenceChatMessages }) {
                 <div key={index} className="flex items-start gap-3 px-4">
                   {role === 'assistant' ? (
                     <div className="w-7 h-7 rounded-full bg-gradient-to-br from-copper via-copper-dark to-gold flex items-center justify-center text-xs font-bold text-charcoal flex-shrink-0 shadow-lg shadow-copper/20">
-                      👨‍🍳
+                      ✨
                     </div>
                   ) : (
                     <div className="w-7 h-7 rounded-full bg-charcoal-light flex items-center justify-center text-xs font-medium text-cream flex-shrink-0 border border-border/50">
@@ -85,7 +85,7 @@ export default function RemyAssistant() {
     () => showRemyAssistant.state,
     () => false,
   )
-  const { messages, sendMessage, isLoading } = useConferenceChat()
+  const { messages, sendMessage, isLoading } = useTutorChat()
   const [input, setInput] = useState('')
 
   const handleToggle = () => {
@@ -111,7 +111,7 @@ export default function RemyAssistant() {
       <div className="relative flex items-center justify-between p-4 border-b border-copper/10">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-copper via-copper-dark to-gold flex items-center justify-center shadow-lg shadow-copper/30 rotate-3 hover:rotate-0 transition-transform">
-            <span className="text-lg">👨‍🍳</span>
+            <span className="text-lg">✨</span>
           </div>
           <div>
             <h3 className="font-display font-bold text-cream text-base tracking-tight">

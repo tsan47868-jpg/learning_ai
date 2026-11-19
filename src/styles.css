@@ -210,9 +210,9 @@ code {
     source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-/* Haute Patisserie Dark Theme */
+/* Learning AI Dark Theme */
 :root {
-  /* Core colors - Dark elegant bakery */
+  /* Core colors - dark warm palette */
   --background: oklch(0.13 0.01 60);
   --foreground: oklch(0.93 0.02 85);
 
@@ -245,7 +245,7 @@ code {
   --input: oklch(0.22 0.02 55);
   --ring: oklch(0.65 0.14 55);
 
-  /* Chart colors - pastry inspired */
+  /* Chart colors - warm palette */
   --chart-1: oklch(0.65 0.14 55);
   --chart-2: oklch(0.72 0.12 85);
   --chart-3: oklch(0.55 0.15 45);

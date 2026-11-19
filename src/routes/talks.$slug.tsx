@@ -88,7 +88,7 @@ function TalkDetailPage() {
                 <p className="text-cream group-hover:text-gold transition-colors font-medium">
                   {talk.speaker}
                 </p>
-                <p className="text-cream/50 text-sm">{speaker.restaurant}</p>
+                <p className="text-cream/50 text-sm">{speaker.company}</p>
               </div>
             </Link>
           ) : (

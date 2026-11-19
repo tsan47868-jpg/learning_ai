@@ -22,8 +22,8 @@ function SpeakersPage() {
               Speakers
             </h1>
             <p className="text-xl text-cream/70 max-w-2xl mx-auto font-body">
-              Meet the world-renowned pastry chefs and master bakers who will
-              share their expertise at Haute Pâtisserie 2026.
+              Meet the educators, engineers, and practitioners who design and
+              teach the Learning AI curriculum.
             </p>
           </div>
         </div>

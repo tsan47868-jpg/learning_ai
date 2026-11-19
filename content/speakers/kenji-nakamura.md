@@ -1,22 +1,20 @@
 ---
 name: "Kenji Nakamura"
-title: "Creative Director of Pastry"
-specialty: "Japanese-French Fusion"
-restaurant: "Umami Flour"
+title: "Automation Architect"
+specialty: "Workflow Automation & AI Agents"
+company: "Flowline AI"
 location: "Kyoto, Japan"
 headshot: "speakers/kenji-nakamura.jpg"
 awards:
-  - "Asia's Best Pastry Chef 2022"
-  - "James Beard Rising Star 2018"
-  - "Tokyo Pastry Academy Distinguished Alumni"
+  - "Japan Productivity Grand Prize 2023"
+  - "Top 50 Automation Builders in Asia 2022"
+  - "Tokyo Tech Conference Distinguished Speaker"
 ---
 
-Kenji Nakamura stands at the fascinating intersection of Japanese precision and French artistry. His unique perspective emerged from a childhood spent between his grandmother's traditional wagashi shop in Kyoto and summers visiting his aunt's Parisian boulangerie — an upbringing that would define his revolutionary approach to pastry.
+Kenji Nakamura turns repetitive work into systems that run themselves. He got his start as an operations manager at a logistics firm in Osaka, where his first automation — a script that reconciled shipping invoices overnight — saved his team fifteen hours a week and earned him an unexpected reputation as the person to ask when something boring needed to happen faster.
 
-After formal training at the Tokyo Pastry Academy, Kenji sought to deepen his French technique at Pierre Hermé Tokyo, where he spent five transformative years. There, he began experimenting with umami-forward flavor profiles in desserts — miso caramel, toasted nori chocolate, and yuzu integrated into classic French preparations.
+That reputation grew into a career. Kenji spent six years designing internal automation for one of Japan's largest e-commerce companies before co-founding Flowline AI, a studio that helps small teams connect their tools and let AI handle the routine parts of their day — triaging messages, routing requests, summarizing meetings, and moving data between systems that were never designed to talk to each other.
 
-His creations challenge Western notions of sweetness while honoring both traditions. The "Matcha Millefeuille" — layers of impossibly thin, crisp pastry with ceremonial-grade matcha cream and white chocolate miso — has been called "a masterpiece of cultural synthesis" by the *Japan Times*.
+His approach is deliberately conservative: automate the dull, reversible tasks first; keep a human approval step until the system has earned trust; and measure saved time honestly, in hours, not hype.
 
-In 2020, Kenji opened Umami Flour in a converted machiya townhouse in Kyoto's historic Gion district. The space blends minimalist Japanese aesthetics with the warmth of a French salon de thé. His tasting menu of eight courses explores the full spectrum of umami in desserts, from subtle to profound, and has earned three stars from the Michelin Guide Japan.
-
-Kenji's philosophy centers on "finding harmony between cultures without erasing either" — a principle that guides both his recipes and his teaching.
+Kenji teaches that a good automation is invisible — you notice it only by what you no longer have to do.

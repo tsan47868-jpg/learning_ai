@@ -9,7 +9,7 @@ var speakers = defineCollection({
     name: z.string(),
     title: z.string(),
     specialty: z.string(),
-    restaurant: z.string(),
+    company: z.string(),
     location: z.string(),
     headshot: z.string(),
     awards: z.array(z.string()).optional(),

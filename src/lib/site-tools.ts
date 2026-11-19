@@ -15,7 +15,7 @@ export const getSpeakerBySlugToolDef = toolDefinition({
     name: z.string(),
     title: z.string(),
     specialty: z.string(),
-    restaurant: z.string(),
+    company: z.string(),
     location: z.string(),
     bio: z.string(),
     awards: z.array(z.string()),
@@ -30,7 +30,7 @@ export const getSpeakerBySlug = getSpeakerBySlugToolDef.server(({ slug }) => {
       name: 'Speaker not found',
       title: '',
       specialty: '',
-      restaurant: '',
+      company: '',
       location: '',
       bio: 'The requested speaker was not found.',
       awards: [],
@@ -40,7 +40,7 @@ export const getSpeakerBySlug = getSpeakerBySlugToolDef.server(({ slug }) => {
     name: speaker.name,
     title: speaker.title,
     specialty: speaker.specialty,
-    restaurant: speaker.restaurant,
+    company: speaker.company,
     location: speaker.location,
     bio: speaker.content,
     awards: speaker.awards || [],
@@ -89,14 +89,14 @@ export const getTalkBySlug = getTalkBySlugToolDef.server(({ slug }) => {
 export const getAllSpeakersToolDef = toolDefinition({
   name: 'getAllSpeakers',
   description:
-    'Get a list of all speakers at the conference with their names, specialties, and restaurants.',
+    'Get a list of all speakers with their names, specialties, and companies.',
   inputSchema: z.object({}),
   outputSchema: z.array(
     z.object({
       slug: z.string(),
       name: z.string(),
       specialty: z.string(),
-      restaurant: z.string(),
+      company: z.string(),
       location: z.string(),
     }),
   ),
@@ -108,7 +108,7 @@ export const getAllSpeakers = getAllSpeakersToolDef.server(() => {
     slug: speaker.slug,
     name: speaker.name,
     specialty: speaker.specialty,
-    restaurant: speaker.restaurant,
+    company: speaker.company,
     location: speaker.location,
   }))
 })
@@ -117,7 +117,7 @@ export const getAllSpeakers = getAllSpeakersToolDef.server(() => {
 export const getAllTalksToolDef = toolDefinition({
   name: 'getAllTalks',
   description:
-    'Get a list of all sessions/talks at the conference with their titles, speakers, and topics.',
+    'Get a list of all sessions/talks with their titles, speakers, and topics.',
   inputSchema: z.object({}),
   outputSchema: z.array(
     z.object({
@@ -141,9 +141,9 @@ export const getAllTalks = getAllTalksToolDef.server(() => {
   }))
 })
 
-// Tool definition for searching conference content
-export const searchConferenceToolDef = toolDefinition({
-  name: 'searchConference',
+// Tool definition for searching site content
+export const searchSiteContentToolDef = toolDefinition({
+  name: 'searchSiteContent',
   description:
     'Search for speakers or sessions by keyword. Use this to find content matching user queries about topics, techniques, or names.',
   inputSchema: z.object({
@@ -155,7 +155,7 @@ export const searchConferenceToolDef = toolDefinition({
         slug: z.string(),
         name: z.string(),
         specialty: z.string(),
-        restaurant: z.string(),
+        company: z.string(),
       }),
     ),
     talks: z.array(
@@ -170,7 +170,7 @@ export const searchConferenceToolDef = toolDefinition({
 })
 
 // Server implementation
-export const searchConference = searchConferenceToolDef.server(({ query }) => {
+export const searchSiteContent = searchSiteContentToolDef.server(({ query }) => {
   const queryLower = query.toLowerCase()
 
   const matchingSpeakers = allSpeakers
@@ -178,14 +178,14 @@ export const searchConference = searchConferenceToolDef.server(({ query }) => {
       (speaker) =>
         speaker.name.toLowerCase().includes(queryLower) ||
         speaker.specialty.toLowerCase().includes(queryLower) ||
-        speaker.restaurant.toLowerCase().includes(queryLower) ||
+        speaker.company.toLowerCase().includes(queryLower) ||
         speaker.content.toLowerCase().includes(queryLower),
     )
     .map((speaker) => ({
       slug: speaker.slug,
       name: speaker.name,
       specialty: speaker.specialty,
-      restaurant: speaker.restaurant,
+      company: speaker.company,
     }))
 
   const matchingTalks = allTalks
@@ -208,3 +208,4 @@ export const searchConference = searchConferenceToolDef.server(({ query }) => {
     talks: matchingTalks,
   }
 })
+

@@ -15,40 +15,40 @@ function getSpeakerByName(name: string) {
   return allSpeakers.find((s) => s.name.toLowerCase() === name.toLowerCase())
 }
 
-// Define the conference schedule with time slots
+// Define the learning path schedule with time slots
 const scheduleData = [
   {
     day: 1,
     date: 'March 15, 2026',
     dayName: 'Day One',
-    theme: 'French Foundations',
+    theme: 'AI Foundations',
     sessions: [
-      { time: '9:00 AM', talkSlug: 'french-macaron-mastery' },
-      { time: '11:30 AM', talkSlug: 'croissant-lamination-secrets' },
-      { time: '3:00 PM', talkSlug: 'the-science-of-sugar' },
+      { time: '9:00 AM', talkSlug: 'ai-foundations-how-models-actually-work' },
+      { time: '11:30 AM', talkSlug: 'prompting-for-reliable-results' },
+      { time: '3:00 PM', talkSlug: 'evaluate-and-improve-ai-output' },
     ],
   },
   {
     day: 2,
     date: 'March 16, 2026',
     dayName: 'Day Two',
-    theme: 'Global Traditions',
+    theme: 'Connect & Automate',
     sessions: [
-      { time: '9:00 AM', talkSlug: 'sourdough-from-starter-to-masterpiece' },
-      { time: '11:30 AM', talkSlug: 'umami-in-pastry-east-meets-west' },
-      { time: '2:30 PM', talkSlug: 'savory-breads-of-the-mediterranean' },
+      { time: '9:00 AM', talkSlug: 'automate-your-repetitive-work' },
+      { time: '11:30 AM', talkSlug: 'set-up-your-first-ai-api' },
+      { time: '2:30 PM', talkSlug: 'build-a-useful-ai-chatbot' },
     ],
   },
   {
     day: 3,
     date: 'March 17, 2026',
     dayName: 'Day Three',
-    theme: 'Artisan Mastery',
+    theme: 'Build with Care',
     sessions: [
-      { time: '9:00 AM', talkSlug: 'the-art-of-the-perfect-tart' },
+      { time: '9:00 AM', talkSlug: 'responsible-ai-in-practice' },
       {
         time: '11:00 AM',
-        talkSlug: 'neapolitan-pizza-tradition-meets-innovation',
+        talkSlug: 'keep-exploring-choosing-tools-and-learning-next',
       },
     ],
   },
@@ -71,14 +71,14 @@ function SchedulePage() {
               <span>March 15-17, 2026</span>
               <span className="mx-2 text-copper/40">•</span>
               <MapPin className="w-4 h-4" />
-              <span>Paris, France</span>
+              <span>Online</span>
             </div>
             <h1 className="font-display text-5xl md:text-6xl font-bold text-cream mb-4">
-              Conference <span className="text-gold italic">Schedule</span>
+              Learning <span className="text-gold italic">Schedule</span>
             </h1>
             <p className="text-xl text-cream/70 max-w-2xl mx-auto font-body">
-              Three days of masterclasses, demonstrations, and culinary
-              inspiration from the world's finest pastry artisans.
+              Three days of guided sessions following the Learning AI path —
+              foundations, practical builds, and responsible use.
             </p>
           </div>
         </div>
@@ -223,7 +223,7 @@ function SchedulePage() {
                             {/* Speaker title if available */}
                             {speaker && (
                               <p className="text-cream/50 text-sm font-body">
-                                {speaker.title} at {speaker.restaurant}
+                                {speaker.title} at {speaker.company}
                               </p>
                             )}
                           </div>
@@ -255,8 +255,8 @@ function SchedulePage() {
                 Don't Miss a Single Session
               </h3>
               <p className="text-cream/60 font-body mb-6 max-w-xl mx-auto">
-                Each masterclass offers hands-on learning from the world's
-                finest pastry artisans.
+                Each session pairs clear explanations with hands-on practice
+                from working AI practitioners.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Link

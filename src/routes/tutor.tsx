@@ -2,8 +2,8 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowUp, BookOpen, MessagesSquare, RotateCcw, Sparkles } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Streamdown } from 'streamdown'
-import { useConferenceChat } from '#/lib/conference-ai-hook'
-import type { ConferenceChatMessages } from '#/lib/conference-ai-hook'
+import { useTutorChat } from '#/lib/tutor-ai-hook'
+import type { TutorChatMessages } from '#/lib/tutor-ai-hook'
 import TutorDrawingBoard from '#/components/TutorDrawingBoard'
 import { parseTutorDiagram, type TutorDiagram } from '#/lib/tutor-diagram'
 
@@ -21,10 +21,10 @@ interface SavedConversation {
   id: string
   title: string
   updatedAt: number
-  messages: ConferenceChatMessages
+  messages: TutorChatMessages
 }
 
-function conversationTitle(messages: ConferenceChatMessages) {
+function conversationTitle(messages: TutorChatMessages) {
   const firstUser = messages.find((message) => message.role === 'user')
   const title = firstUser?.parts
     .filter((part) => part.type === 'text')
@@ -35,7 +35,7 @@ function conversationTitle(messages: ConferenceChatMessages) {
   return title ? (title.length > 42 ? `${title.slice(0, 42).trim()}…` : title) : 'New conversation'
 }
 
-function conversationPreview(messages: ConferenceChatMessages) {
+function conversationPreview(messages: TutorChatMessages) {
   const lastUser = [...messages].reverse().find((message) => message.role === 'user')
   const preview = lastUser?.parts
     .filter((part) => part.type === 'text')
@@ -67,7 +67,7 @@ function parseLegacyDrawing(source: string, title: string): TutorDiagram | null 
   })
 }
 
-function findLatestDiagram(messages: ReturnType<typeof useConferenceChat>['messages']): TutorDiagram | undefined {
+function findLatestDiagram(messages: ReturnType<typeof useTutorChat>['messages']): TutorDiagram | undefined {
   const reversed = [...messages].reverse()
   for (const [index, message] of reversed.entries()) {
     if (message.role !== 'assistant') continue
@@ -127,7 +127,7 @@ function TutorPage() {
   const [activeChatId, setActiveChatId] = useState('learning-ai-tutor')
   const [mobileHistoryOpen, setMobileHistoryOpen] = useState(false)
   const savedActiveChat = history.find((conversation) => conversation.id === activeChatId)
-  const { messages, sendMessage, isLoading } = useConferenceChat(activeChatId, savedActiveChat?.messages)
+  const { messages, sendMessage, isLoading } = useTutorChat(activeChatId, savedActiveChat?.messages)
   const [input, setInput] = useState('')
   const [diagram, setDiagram] = useState<TutorDiagram>()
   const scrollRef = useRef<HTMLDivElement>(null)

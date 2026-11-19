@@ -48,14 +48,14 @@ export default function SpeakerCard({
               {speaker.name}
             </h3>
 
-            {/* Title & Restaurant */}
+            {/* Title & Company */}
             <p className="text-cream/70 font-body text-lg">{speaker.title}</p>
 
             {/* Location */}
             <div className="flex items-center gap-2 text-cream/50 text-sm">
               <MapPin className="w-3.5 h-3.5" />
               <span>
-                {speaker.restaurant}, {speaker.location}
+                {speaker.company}, {speaker.location}
               </span>
             </div>
           </div>

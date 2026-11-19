@@ -71,7 +71,7 @@ function SpeakerDetailPage() {
               <div className="flex items-center gap-2 text-cream/60 text-lg mb-8">
                 <MapPin className="w-5 h-5 text-copper" />
                 <span>
-                  {speaker.restaurant}, {speaker.location}
+                  {speaker.company}, {speaker.location}
                 </span>
               </div>
 
