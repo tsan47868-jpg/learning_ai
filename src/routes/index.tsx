@@ -57,6 +57,31 @@ function HomePage() {
     cards.forEach((card) => observer.observe(card))
     return () => observer.disconnect()
   }, [])
+
+  useEffect(() => {
+    const targets = document.querySelectorAll<HTMLElement>(
+      '.learning-home .section-heading, .learning-home .topic-card, .learning-home .manifesto-inner, .learning-home .journey-heading, .learning-home .closing-cta .cta-box, .learning-home .faq-heading, .learning-home .faq-item',
+    )
+    if (!('IntersectionObserver' in window)) {
+      targets.forEach((target) => target.classList.add('is-revealed'))
+      return
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed')
+          observer.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' })
+
+    targets.forEach((target) => {
+      target.classList.add('reveal-on-scroll')
+      observer.observe(target)
+    })
+    return () => observer.disconnect()
+  }, [])
   return (
     <main className="learning-home">
       <section className="home-hero page-wrap px-4 py-16 sm:py-24">
