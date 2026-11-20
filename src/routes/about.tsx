@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowRight, BookOpen, Compass, Heart, Lightbulb, Sparkles, Workflow } from 'lucide-react'
+import { ArrowRight, BookOpen, Compass, Heart, Lightbulb, Workflow } from 'lucide-react'
+import PageHero from '#/components/PageHero'
 
 export const Route = createFileRoute('/about')({ component: AboutPage })
 
@@ -18,21 +19,14 @@ const steps = [
 function AboutPage() {
   return (
     <main className="about-page">
-      <section className="about-hero page-wrap px-4">
-        <div className="about-hero-copy">
-          <p className="home-eyebrow"><span /> A little about us</p>
-          <h1>AI is easier<br />when we learn<br /><em>it together.</em></h1>
-          <p>Learning AI is a welcoming place to make sense of new technology. We share approachable explanations and practical ideas to help you go from curious to confident, one useful step at a time.</p>
-          <Link to="/talks" className="home-button">Explore what you can learn <ArrowRight size={17} /></Link>
-        </div>
-        <div className="about-hero-art" aria-label="An illustrated learning notebook surrounded by ideas">
-          <div className="about-art-orbit orbit-a" /><div className="about-art-orbit orbit-b" />
-          <span className="about-art-spark spark-one">✳</span><span className="about-art-spark spark-two">✦</span>
-          <div className="about-note"><span className="about-note-label">A NOTE TO THE CURIOUS</span><div className="about-note-symbol">✳</div><strong>Ask a question.<br /><em>Try an idea.</em></strong><span className="about-note-foot">There’s always a place to begin.</span></div>
-          <div className="about-float float-left"><Sparkles size={16} /> Stay curious</div>
-          <div className="about-float float-right"><Workflow size={16} /> Make it useful</div>
-        </div>
-      </section>
+      <PageHero
+        wordmark="ABOUT"
+        eyebrow="A little about us"
+        title={<>AI is easier<br />when we learn<br /><em>it together.</em></>}
+        sub="Learning AI is a welcoming place to make sense of new technology. We share approachable explanations and practical ideas to help you go from curious to confident, one useful step at a time."
+        actions={<Link to="/talks" className="home-button">Explore what you can learn <ArrowRight size={17} /></Link>}
+        phone={{ badge: 'Our story', title: <>Learn it<br />together</>, cta: 'See guides' }}
+      />
 
       <section className="about-ribbon"><div className="page-wrap about-ribbon-inner"><span>✳</span><p>Less overwhelm. More understanding.</p><i /><p>Skills for the things you want to do.</p><span>✳</span></div></section>
 

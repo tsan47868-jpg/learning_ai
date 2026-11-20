@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import PageHero from '#/components/PageHero'
+
 import { allSpeakers } from 'content-collections'
 
 import SpeakerCard from '#/components/SpeakerCard'
@@ -14,19 +16,13 @@ function SpeakersPage() {
     <>
       <RemyAssistant />
       <div className="min-h-screen">
-        {/* Hero section */}
-        <div className="relative py-16 px-6">
-          <div className="max-w-7xl mx-auto text-center">
-            <h1 className="font-display text-5xl md:text-6xl font-bold text-cream mb-4">
-              Our <span className="text-gold italic">Distinguished</span>{' '}
-              Speakers
-            </h1>
-            <p className="text-xl text-cream/70 max-w-2xl mx-auto font-body">
-              Meet the educators, engineers, and practitioners who design and
-              teach the Learning AI curriculum.
-            </p>
-          </div>
-        </div>
+        <PageHero
+          wordmark="SPEAKERS"
+          eyebrow="Meet the team"
+          title={<>Our <em>Distinguished</em><br />Speakers</>}
+          sub="Meet the educators, engineers, and practitioners who design and teach the Learning AI curriculum."
+          phone={{ badge: 'The team', title: <>Distinguished<br />speakers</>, cta: 'View guides' }}
+        />
 
         {/* Speakers grid */}
         <div className="max-w-7xl mx-auto px-6 pb-20">

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRight, BookOpen, Workflow, KeyRound, Code2, ShieldCheck, Sparkles, Play, Check, Compass, TrendingUp, Rocket, Plus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import PageHero from '#/components/PageHero'
 
 export const Route = createFileRoute('/')({ component: HomePage })
 
@@ -40,33 +41,7 @@ const faqs = [
 
 function HomePage() {
   const journeyRef = useRef<HTMLElement>(null)
-  const heroArtRef = useRef<HTMLDivElement>(null)
   const [journeyProgress, setJourneyProgress] = useState(0)
-
-  // 3D tilt: the hero scene follows the cursor with depth-separated layers.
-  useEffect(() => {
-    const art = heroArtRef.current
-    if (!art) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
-    const tilt = (event: MouseEvent) => {
-      const rect = art.getBoundingClientRect()
-      const x = (event.clientX - rect.left) / rect.width - 0.5
-      const y = (event.clientY - rect.top) / rect.height - 0.5
-      art.style.setProperty('--ry', `${(x * 13).toFixed(2)}deg`)
-      art.style.setProperty('--rx', `${(-y * 9).toFixed(2)}deg`)
-    }
-    const reset = () => {
-      art.style.setProperty('--ry', '0deg')
-      art.style.setProperty('--rx', '0deg')
-    }
-    art.addEventListener('mousemove', tilt)
-    art.addEventListener('mouseleave', reset)
-    return () => {
-      art.removeEventListener('mousemove', tilt)
-      art.removeEventListener('mouseleave', reset)
-    }
-  }, [])
 
   useEffect(() => {
     const section = journeyRef.current
@@ -129,30 +104,15 @@ function HomePage() {
   }, [])
   return (
     <main className="learning-home">
-      <section className="home-hero page-wrap px-4 py-16 sm:py-24">
-        <div className="hero-copy">
-          <p className="home-eyebrow"><span /> Practical AI, made approachable</p>
-          <h1>Make AI work<br /><em>for you.</em></h1>
-          <p className="hero-intro">Learn the tools, build useful automations, and connect AI to the things you want to make. Clear guidance for curious people, beginners, and builders.</p>
-          <div className="hero-actions">
-            <Link to="/talks" className="home-button">Explore AI topics <ArrowRight size={17} /></Link>
-            <a href="#learning-path" className="home-text-link"><Play size={15} /> See what you can learn</a>
-          </div>
-          <p className="hero-note">No hype. Just useful skills, learned one step at a time.</p>
-        </div>
-        <div className="hero-art" ref={heroArtRef} aria-label="Illustration of connected AI tools">
-          <div className="hero-3d">
-            <div className="hero-sway">
-              <div className="orbit orbit-one" /><div className="orbit orbit-two" />
-              <div className="art-card art-main"><span className="art-kicker">IDEA → IMPACT</span><div className="art-brain">✳</div><strong>Learn it.<br />Build it.</strong><span className="art-caption">AI skills for real life</span></div>
-              <div className="art-chip chip-top"><Sparkles size={16} /> Generative AI</div>
-              <div className="art-chip chip-right"><Workflow size={16} /> Automation</div>
-              <div className="art-chip chip-bottom"><KeyRound size={16} /> APIs</div>
-              <span className="art-spark spark-a">✳</span><span className="art-spark spark-b">✦</span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        wordmark="LEARNING AI"
+        eyebrow="Practical AI, made approachable"
+        title={<>Make AI work<br /><em>for you.</em></>}
+        sub="Learn the tools, build useful automations, and connect AI to the things you want to make. Clear guidance for curious people, beginners, and builders."
+        note="No hype. Just useful skills, learned one step at a time."
+        actions={<><Link to="/talks" className="home-button">Explore AI topics <ArrowRight size={17} /></Link><a href="#learning-path" className="home-text-link"><Play size={15} /> See what you can learn</a></>}
+        phone={{ badge: 'New guides', title: <>Make AI<br />work for you</>, cta: 'Explore topics' }}
+      />
 
       <section className="proof-strip"><div className="page-wrap proof-inner"><span className="proof-star">✳</span><p>Curiosity is a great place to start.</p><span className="proof-rule"/><p>Build skills you can put to work.</p><span className="proof-star">✳</span></div></section>
 
