@@ -86,7 +86,7 @@ function HomePage() {
 
   useEffect(() => {
     const targets = document.querySelectorAll<HTMLElement>(
-      '.learning-home .section-heading, .learning-home .topic-card, .learning-home .manifesto-inner, .learning-home .journey-heading, .learning-home .closing-cta .cta-box, .learning-home .faq-heading, .learning-home .faq-item',
+      '.learning-home .section-heading, .learning-home .topic-card, .learning-home .manifesto-inner, .learning-home .showcase-inner, .learning-home .journey-heading, .learning-home .closing-cta .cta-box, .learning-home .faq-heading, .learning-home .faq-item',
     )
     const notes = document.querySelectorAll<HTMLElement>('.learning-home .journey-sticky-note')
     if (!('IntersectionObserver' in window)) {
@@ -162,6 +162,8 @@ function HomePage() {
       </section>
 
       <section className="manifesto-band"><div className="page-wrap manifesto-inner"><span className="manifesto-mark">“</span><div><p className="home-eyebrow">The idea behind Learning AI</p><h2>Technology should open doors,<br /><em>not make things harder.</em></h2><p>We’re here to make AI easier to understand and more practical to use—so you can spend less time feeling stuck and more time creating, learning, and moving forward.</p></div></div></section>
+
+      <section className="showcase-band"><div className="page-wrap showcase-inner"><div className="showcase-copy"><p className="home-eyebrow">From idea to reality</p><h2>See what you can<br /><em>build.</em></h2><p>A polished page, a handy automation, a small tool of your own—they all start with a single step. Here’s a taste of what the pieces can become.</p><Link to="/talks" className="home-text-link">Start your first project <ArrowRight size={15} /></Link></div><figure className="showcase-frame"><img src="/design-showcase.jpg" alt="Green landing page design featuring a ninja mascot" loading="lazy" /></figure></div></section>
 
       <section className="journey-section page-wrap px-4 py-20 sm:py-28" ref={journeyRef}>
         <div className="journey-heading"><p className="home-eyebrow">A path you can take at your own pace</p><h2>You’re not building<br /><em>this alone.</em></h2><p>Grow your AI skills step by step. Start with a first project, find ways to make it useful, then build on what works.</p></div>
