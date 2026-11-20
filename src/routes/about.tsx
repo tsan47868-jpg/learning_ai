@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useRef } from 'react'
 import { ArrowRight, BookOpen, Compass, Heart, Lightbulb, Workflow } from 'lucide-react'
 import PageHero from '#/components/PageHero'
+import { useRevealOnScroll } from '#/lib/use-reveal'
 
 export const Route = createFileRoute('/about')({ component: AboutPage })
 
@@ -17,8 +19,10 @@ const steps = [
 ]
 
 function AboutPage() {
+  const pageRef = useRef<HTMLElement>(null)
+  useRevealOnScroll(pageRef, '.about-ribbon-inner, .about-story, .about-section-heading, .about-principle, .about-approach-heading, .about-step, .about-cta-box')
   return (
-    <main className="about-page">
+    <main className="about-page" ref={pageRef}>
       <PageHero
         wordmark="ABOUT"
         eyebrow="A little about us"
@@ -42,7 +46,7 @@ function AboutPage() {
 
       <section className="about-approach-band"><div className="page-wrap about-approach px-4"><div className="about-approach-heading"><p className="home-eyebrow">A simple way forward</p><h2>Curiosity turns<br /><em>into capability.</em></h2><p>You do not need to know it all before you begin. Pick a starting point, experiment at your own pace, and grow from there.</p></div><div className="about-steps">{steps.map(({ icon: Icon, title, text }, index) => <article className="about-step" key={title}><div className="about-step-icon"><Icon size={20} /></div><span>STEP 0{index + 1}</span><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
 
-      <section className="about-cta page-wrap px-4 py-20 sm:py-24"><div className="about-cta-box"><div><p className="home-eyebrow">Your next step starts here</p><h2>Bring a question.<br /><em>Leave with an idea.</em></h2><p>Browse a topic, ask the AI tutor, or simply follow your curiosity.</p></div><div className="about-cta-actions"><Link to="/talks" className="home-button">Explore AI topics <ArrowRight size={17} /></Link><Link to="/tutor" className="about-secondary-link">Meet your AI tutor <ArrowRight size={15} /></Link></div><span className="about-cta-spark">✳</span></div></section>
+      <section className="about-cta page-wrap px-4 py-20 sm:py-24"><div className="about-cta-box green-cta"><div><p className="home-eyebrow">Your next step starts here</p><h2>Bring a question.<br /><em>Leave with an idea.</em></h2><p>Browse a topic, ask the AI tutor, or simply follow your curiosity.</p></div><div className="about-cta-actions"><Link to="/talks" className="home-button">Explore AI topics <ArrowRight size={17} /></Link><Link to="/tutor" className="about-secondary-link">Meet your AI tutor <ArrowRight size={15} /></Link></div><span className="about-cta-spark">✳</span></div></section>
     </main>
   )
 }

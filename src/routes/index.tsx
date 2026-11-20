@@ -138,7 +138,7 @@ function HomePage() {
         <Link to="/talks" className="home-button journey-cta">See your learning path <ArrowRight size={17}/></Link>
       </section>
 
-      <section className="closing-cta page-wrap px-4 py-20 sm:py-28"><div className="cta-box"><div><p className="home-eyebrow">Your next step starts here</p><h2>Curious about AI?<br /><em>Let’s make it useful.</em></h2><p>Explore a topic, follow an idea, and build something that makes your day a little easier.</p></div><Link to="/talks" className="home-button">Start exploring <ArrowRight size={17} /></Link><span className="cta-decoration">✳</span></div></section>
+      <section className="closing-cta page-wrap px-4 py-20 sm:py-28"><div className="cta-box green-cta"><div><p className="home-eyebrow">Your next step starts here</p><h2>Curious about AI?<br /><em>Let’s make it useful.</em></h2><p>Explore a topic, follow an idea, and build something that makes your day a little easier.</p></div><Link to="/talks" className="home-button">Start exploring <ArrowRight size={17} /></Link><span className="cta-decoration">✳</span></div></section>
       <section className="faq-section page-wrap px-4 py-20 sm:py-24">
         <div className="faq-heading"><p className="home-eyebrow">A little clarity goes a long way</p><h2>Common questions</h2><p>Quick answers to help you find your next step with AI.</p></div>
         <div className="faq-list">{faqs.map(({question,answer})=><details className="faq-item" key={question}><summary>{question}<span className="faq-toggle"><Plus size={13}/></span></summary><p>{answer}</p></details>)}</div>

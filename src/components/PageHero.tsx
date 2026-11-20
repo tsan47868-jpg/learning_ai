@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react'
-import { Link } from '@tanstack/react-router'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import type { ReactNode } from 'react'
 
@@ -71,11 +70,10 @@ export default function PageHero({ wordmark, eyebrow, title, sub, note, actions,
               </div>
             </div>
           </div>
-          <Link to="/tutor" className="tutor-float">
+          <div className="tutor-float" aria-label="AI tutor">
             <span className="tutor-orb" aria-hidden="true">✳</span>
             <span className="tutor-float-text"><b>AI tutor</b><small>Ask anything · get a visual</small></span>
-            <ArrowRight size={15} />
-          </Link>
+          </div>
           <span className="hero-float-chip"><Sparkles size={13} /> New guides weekly</span>
         </div>
       </div>

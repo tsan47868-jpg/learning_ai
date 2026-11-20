@@ -487,3 +487,77 @@ code {
 .diagram-svg{display:block;flex:1 1 auto;width:100%;height:100%;min-width:0;min-height:0;padding:0;overflow:hidden;touch-action:none;transition:none}
 .drawing-board-mark.is-selected{filter:drop-shadow(0 0 4px #286b5977)}
 @media(max-width:640px){.drawing-board-paper{min-height:0}}
+
+/* ===== Body ↔ hero harmony — shared palette, arrangement rhythm, motion ===== */
+
+/* Mid-page bands echo the hero gradient as a light version. */
+.manifesto-band,.about-approach-band{background:linear-gradient(128deg,#eaf4ee 0%,#dcefe5 55%,#cfeadd 100%)}
+.proof-strip,.about-ribbon,.showcase-band,.contact-form-section,.contact-note{background:#eff6f1}
+
+/* Cards share one recipe everywhere: soft mint gradient, mint hover, hero-depth shadow. */
+.topic-card,.topics-card,.contact-card,.about-principle,.about-step{border:1px solid #dce8df;border-radius:16px;background:linear-gradient(165deg,#fffefa 0%,#f0f8f2 100%);transition:transform .3s cubic-bezier(.2,.75,.25,1),box-shadow .3s ease,border-color .3s ease}
+.topic-card:hover,.topics-card:hover,.contact-card:hover,.about-principle:hover,.about-step:hover{transform:translateY(-7px);border-color:#8fd3b8;box-shadow:0 22px 46px rgba(18,63,54,.14)}
+.contact-card-featured,.about-principle:nth-child(2){background:linear-gradient(165deg,#eaf6ee 0%,#d6eee1 100%)}
+.topic-top,.topics-card-top,.about-principle-top{color:#2c8a6d}
+.contact-icon,.about-step-icon{background:#fff;color:#2c8a6d;box-shadow:0 8px 18px rgba(23,60,52,.12)}
+
+/* Green CTA bookends: every page closes with the same panel the hero opens with. */
+.green-cta{position:relative;overflow:hidden;margin:.85rem;border:0;border-radius:30px;background:linear-gradient(128deg,#123f36 0%,#1c5f4e 45%,#48a17e 100%);color:#f3faf5;box-shadow:0 34px 80px rgba(18,63,54,.2)}
+.green-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(90% 130% at 85% 12%,rgba(165,255,216,.2),transparent 55%),radial-gradient(70% 100% at 6% 92%,rgba(6,30,24,.5),transparent 62%);pointer-events:none}
+.green-cta>.page-wrap,.green-cta>div{position:relative;z-index:1}
+.green-cta .home-eyebrow{color:#a5e8c8}
+.green-cta h2{color:#f6fcf8}
+.green-cta h2 em{color:#a5e8c8}
+.green-cta p{color:rgba(238,250,243,.84)}
+.cta-box>div>p:last-child,.about-cta-box>div:first-child>p:last-child{color:rgba(238,250,243,.84)}
+.green-cta .home-button{background:#f3faf5;color:#14453a}
+.green-cta .home-button:hover{background:#a5e8c8;color:#123f36;transform:translateY(-2px);box-shadow:0 12px 28px rgba(6,30,24,.35)}
+.green-cta .home-text-link,.green-cta .topic-link,.green-cta .about-secondary-link{color:#d9f6e8}
+.green-cta .cta-decoration,.green-cta .about-cta-spark{color:rgba(255,255,255,.13);animation:deco-spin 46s linear infinite}
+
+/* Shared scroll reveal: headings, cards and CTA panels fade up as you scroll. */
+.reveal-on-scroll{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.75,.25,1)}
+.reveal-on-scroll.is-revealed{opacity:1;transform:none}
+:is(.topic-grid,.topics-grid,.contact-options,.about-principle-grid,.about-steps,.speakers-grid)>.reveal-on-scroll:nth-child(2){transition-delay:.08s}
+:is(.topic-grid,.topics-grid,.contact-options,.about-principle-grid,.about-steps,.speakers-grid)>.reveal-on-scroll:nth-child(3){transition-delay:.16s}
+:is(.topic-grid,.topics-grid,.contact-options,.about-principle-grid,.about-steps,.speakers-grid)>.reveal-on-scroll:nth-child(4){transition-delay:.24s}
+:is(.topic-grid,.topics-grid,.contact-options,.about-principle-grid,.about-steps,.speakers-grid)>.reveal-on-scroll:nth-child(5){transition-delay:.32s}
+:is(.topic-grid,.topics-grid,.contact-options,.about-principle-grid,.about-steps,.speakers-grid)>.reveal-on-scroll:nth-child(6){transition-delay:.4s}
+
+/* Small idle motion shared across bodies: twinkling stars in the strips. */
+.proof-star,.about-ribbon-inner span{animation:home-spark 3s ease-in-out infinite}
+
+/* Speakers page joins the light green body language. */
+.speakers-page{--ink:#183b37;--muted-ink:#59716d;--paper:#f8f8f3;--line-home:#dce6df;background:var(--paper);color:var(--ink)}
+.speakers-list{padding-top:3rem;padding-bottom:5rem}
+.speakers-heading{display:flex;align-items:end;justify-content:space-between;gap:2rem;margin-bottom:2.5rem}
+.speakers-heading .home-eyebrow{margin-bottom:.7rem}
+.speakers-heading h2{margin:0;color:#183b37;font:500 clamp(2.8rem,5vw,4rem)/1 Georgia,serif;letter-spacing:-.05em}
+.speakers-heading h2 em{color:#4d9e8d;font-weight:400}
+.speakers-heading>p{max-width:390px;margin:0 0 .3rem;color:#59716d;font:.95rem/1.75 system-ui,sans-serif}
+.speakers-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.4rem}
+.speakers-cta-inner{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem}
+/* Photo cards keep their dark overlay; accents shift from copper/gold to mint. */
+.speakers-page [class*="bg-copper"]{background-color:rgba(126,222,187,.22)}
+.speakers-page [class*="text-copper"]{color:#bfead6}
+.speakers-page [class*="border-copper"]{border-color:rgba(126,222,187,.45)}
+.speakers-page [class*="from-copper"]{background-image:linear-gradient(to bottom left,rgba(94,214,176,.3),transparent)}
+.speakers-page .group:hover h3{color:#a5e8c8}
+
+/* Motion off when the visitor asks for less. */
+@media(prefers-reduced-motion:reduce){
+  .reveal-on-scroll{opacity:1!important;transform:none!important;transition:none!important}
+}
+
+/* Body harmony responsive rules. */
+@media(max-width:800px){
+  .speakers-heading{display:block}
+  .speakers-heading>p{margin-top:1rem}
+  .speakers-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .speakers-cta-inner{display:block}
+}
+@media(max-width:560px){
+  .speakers-grid{grid-template-columns:1fr}
+  .speakers-cta-inner .home-button{margin-top:1.25rem}
+  .green-cta{margin:.55rem;border-radius:22px}
+}

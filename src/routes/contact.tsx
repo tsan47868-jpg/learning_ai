@@ -1,12 +1,15 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
 import { ArrowRight, Mail, MessageCircle, Lightbulb } from 'lucide-react'
 import PageHero from '#/components/PageHero'
+import { useRevealOnScroll } from '#/lib/use-reveal'
 
 export const Route = createFileRoute('/contact')({ component: ContactPage })
 
 function ContactPage() {
   const [formNotice, setFormNotice] = useState('')
+  const pageRef = useRef<HTMLElement>(null)
+  useRevealOnScroll(pageRef, '.contact-section-heading, .contact-card, .contact-form-section, .contact-note, .contact-bottom-inner')
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -22,7 +25,7 @@ function ContactPage() {
   }
 
   return (
-    <main className="contact-page">
+    <main className="contact-page" ref={pageRef}>
       <PageHero
         wordmark="CONTACT"
         eyebrow="Questions, ideas, and hellos"
@@ -54,7 +57,7 @@ function ContactPage() {
         </section>
         <div className="contact-note"><span>✳</span><p><strong>A quick note:</strong> The email address is currently a placeholder. Replace <b>hello@example.com</b> with your preferred contact address before publishing.</p></div>
       </section>
-      <section className="contact-bottom"><div className="page-wrap contact-bottom-inner"><p className="home-eyebrow">Keep exploring</p><h2>Good questions lead<br /><em>to useful things.</em></h2><Link to="/talks" className="home-button">Browse AI topics <ArrowRight size={17}/></Link></div></section>
+      <section className="contact-bottom green-cta"><div className="page-wrap contact-bottom-inner"><p className="home-eyebrow">Keep exploring</p><h2>Good questions lead<br /><em>to useful things.</em></h2><Link to="/talks" className="home-button">Browse AI topics <ArrowRight size={17}/></Link></div></section>
     </main>
   )
 }

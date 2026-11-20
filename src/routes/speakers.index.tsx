@@ -1,6 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { useRef } from 'react'
+import { ArrowRight } from 'lucide-react'
 
 import PageHero from '#/components/PageHero'
+import { useRevealOnScroll } from '#/lib/use-reveal'
 
 import { allSpeakers } from 'content-collections'
 
@@ -12,10 +15,13 @@ export const Route = createFileRoute('/speakers/')({
 })
 
 function SpeakersPage() {
+  const pageRef = useRef<HTMLDivElement>(null)
+  useRevealOnScroll(pageRef, '.speakers-heading, .speakers-grid > a, .speakers-cta-inner')
+
   return (
     <>
       <RemyAssistant />
-      <div className="min-h-screen">
+      <div className="min-h-screen speakers-page" ref={pageRef}>
         <PageHero
           wordmark="SPEAKERS"
           eyebrow="Meet the team"
@@ -24,14 +30,31 @@ function SpeakersPage() {
           phone={{ badge: 'The team', title: <>Distinguished<br />speakers</>, cta: 'View guides' }}
         />
 
-        {/* Speakers grid */}
-        <div className="max-w-7xl mx-auto px-6 pb-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <section className="speakers-list page-wrap px-4">
+          <div className="speakers-heading">
+            <div>
+              <p className="home-eyebrow">Behind the curriculum</p>
+              <h2>Guides made by<br /><em>real practitioners.</em></h2>
+            </div>
+            <p>Every Learning AI guide is shaped by educators, engineers, and builders who use these tools in practice.</p>
+          </div>
+          <div className="speakers-grid">
             {allSpeakers.map((speaker) => (
               <SpeakerCard key={speaker.slug} speaker={speaker} />
             ))}
           </div>
-        </div>
+        </section>
+
+        <section className="speakers-cta green-cta">
+          <div className="page-wrap speakers-cta-inner">
+            <div>
+              <p className="home-eyebrow">Your turn next</p>
+              <h2>Ready to start<br /><em>learning?</em></h2>
+              <p>Pick a topic, ask the AI tutor, and take your first step today.</p>
+            </div>
+            <Link to="/talks" className="home-button">Browse AI topics <ArrowRight size={17} /></Link>
+          </div>
+        </section>
       </div>
     </>
   )

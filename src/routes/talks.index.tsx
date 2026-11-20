@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useRef } from 'react'
 import { ArrowRight, Brain, Workflow, KeyRound, Code2, ShieldCheck, Sparkles } from 'lucide-react'
 import PageHero from '#/components/PageHero'
+import { useRevealOnScroll } from '#/lib/use-reveal'
 
 export const Route = createFileRoute('/talks/')({ component: AiAboutPage })
 
@@ -14,8 +16,10 @@ const areas = [
 ]
 
 function AiAboutPage() {
+  const pageRef = useRef<HTMLElement>(null)
+  useRevealOnScroll(pageRef, '.topics-heading, .topics-card, .topics-bottom-inner')
   return (
-    <main className="topics-page">
+    <main className="topics-page" ref={pageRef}>
       <PageHero
         wordmark="TOPICS"
         eyebrow="Learn at your own pace"
@@ -28,7 +32,7 @@ function AiAboutPage() {
         <div className="topics-heading"><div><p className="home-eyebrow">Explore the learning path</p><h2>Choose a place<br/><em>to begin.</em></h2></div><p>There’s no single right way to learn AI. Pick a topic, follow your curiosity, and come back when you’re ready for the next step.</p></div>
         <div className="topics-grid">{areas.map(({icon:Icon,label,title,text},index)=><article className="topics-card" key={title}><div className="topics-card-top"><span>0{index+1}</span><Icon size={22}/></div><p className="topic-eyebrow">{label}</p><h3>{title}</h3><p className="topics-card-copy">{text}</p><Link to="/contact" className="topic-link">Ask about this <ArrowRight size={15}/></Link></article>)}</div>
       </section>
-      <section className="topics-bottom"><div className="page-wrap topics-bottom-inner"><div><p className="home-eyebrow">Keep moving forward</p><h2>Small steps.<br/><em>Useful skills.</em></h2><p>Have a question or an idea for a topic? We’re always glad to hear what you’re learning.</p></div><Link to="/contact" className="home-button">Get in touch <ArrowRight size={17}/></Link></div></section>
+      <section className="topics-bottom green-cta"><div className="page-wrap topics-bottom-inner"><div><p className="home-eyebrow">Keep moving forward</p><h2>Small steps.<br/><em>Useful skills.</em></h2><p>Have a question or an idea for a topic? We’re always glad to hear what you’re learning.</p></div><Link to="/contact" className="home-button">Get in touch <ArrowRight size={17}/></Link></div></section>
     </main>
   )
 }
