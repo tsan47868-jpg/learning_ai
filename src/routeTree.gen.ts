@@ -17,6 +17,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TutorRouteImport } from './routes/tutor'
 import { Route as ApiRemyChatRouteImport } from './routes/api.remy-chat'
+import { Route as ApiRemyImageRouteImport } from './routes/api.remy-image'
 import { Route as ScheduleIndexRouteImport } from './routes/schedule.index'
 import { Route as SpeakersIndexRouteImport } from './routes/speakers.index'
 import { Route as SpeakersSlugRouteImport } from './routes/speakers.$slug'
@@ -63,6 +64,11 @@ const ApiRemyChatRoute = ApiRemyChatRouteImport.update({
   path: '/api/remy-chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiRemyImageRoute = ApiRemyImageRouteImport.update({
+  id: '/api/remy-image',
+  path: '/api/remy-image',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ScheduleIndexRoute = ScheduleIndexRouteImport.update({
   id: '/schedule/',
   path: '/schedule/',
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/tutor': typeof TutorRoute
   '/api/remy-chat': typeof ApiRemyChatRoute
+  '/api/remy-image': typeof ApiRemyImageRoute
   '/speakers/$slug': typeof SpeakersSlugRoute
   '/talks/$slug': typeof TalksSlugRoute
   '/schedule/': typeof ScheduleIndexRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/tutor': typeof TutorRoute
   '/api/remy-chat': typeof ApiRemyChatRoute
+  '/api/remy-image': typeof ApiRemyImageRoute
   '/speakers/$slug': typeof SpeakersSlugRoute
   '/talks/$slug': typeof TalksSlugRoute
   '/schedule': typeof ScheduleIndexRoute
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/tutor': typeof TutorRoute
   '/api/remy-chat': typeof ApiRemyChatRoute
+  '/api/remy-image': typeof ApiRemyImageRoute
   '/speakers/$slug': typeof SpeakersSlugRoute
   '/talks/$slug': typeof TalksSlugRoute
   '/schedule/': typeof ScheduleIndexRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tutor'
     | '/api/remy-chat'
+    | '/api/remy-image'
     | '/speakers/$slug'
     | '/talks/$slug'
     | '/schedule/'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tutor'
     | '/api/remy-chat'
+    | '/api/remy-image'
     | '/speakers/$slug'
     | '/talks/$slug'
     | '/schedule'
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tutor'
     | '/api/remy-chat'
+    | '/api/remy-image'
     | '/speakers/$slug'
     | '/talks/$slug'
     | '/schedule/'
@@ -192,6 +204,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   TutorRoute: typeof TutorRoute
   ApiRemyChatRoute: typeof ApiRemyChatRoute
+  ApiRemyImageRoute: typeof ApiRemyImageRoute
   SpeakersSlugRoute: typeof SpeakersSlugRoute
   TalksSlugRoute: typeof TalksSlugRoute
   ScheduleIndexRoute: typeof ScheduleIndexRoute
@@ -257,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRemyChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/remy-image': {
+      id: '/api/remy-image'
+      path: '/api/remy-image'
+      fullPath: '/api/remy-image'
+      preLoaderRoute: typeof ApiRemyImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/schedule/': {
       id: '/schedule/'
       path: '/schedule'
@@ -304,6 +324,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   TutorRoute: TutorRoute,
   ApiRemyChatRoute: ApiRemyChatRoute,
+  ApiRemyImageRoute: ApiRemyImageRoute,
   SpeakersSlugRoute: SpeakersSlugRoute,
   TalksSlugRoute: TalksSlugRoute,
   ScheduleIndexRoute: ScheduleIndexRoute,

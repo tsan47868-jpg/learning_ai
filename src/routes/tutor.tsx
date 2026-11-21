@@ -1,10 +1,14 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowUp, BookOpen, RotateCcw, Sparkles } from 'lucide-react'
+import { ArrowUp, BookOpen, Download, ImagePlus, RotateCcw, Sparkles } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Streamdown } from 'streamdown'
 import { useTutorChat } from '#/lib/tutor-ai-hook'
 import type { TutorChatMessages } from '#/lib/tutor-ai-hook'
 import InlineDiagram from '#/components/InlineDiagram'
+import { parseTutorDiagram } from '#/lib/tutor-diagram'
+import InlineImage from '#/components/InlineImage'
+import InlineDoc from '#/components/InlineDoc'
+import { downloadTextFile, safeFilename, stripSpecialBlocks, toWordDocument } from '#/lib/tutor-export'
 
 export const Route = createFileRoute('/tutor')({ component: TutorPage })
 
@@ -42,21 +46,50 @@ function createConversationId() {
 
 function renderMessageContent(content: string): ReactNode[] {
   const nodes: ReactNode[] = []
-  const fence = /```(diagram|html|drawing)\s*([\s\S]*?)```/gi
+  const fence = /```(diagram|image|doc|json|html|drawing)\s*([\s\S]*?)```/gi
   let lastIndex = 0
   let match: RegExpExecArray | null
   while ((match = fence.exec(content))) {
     const before = content.slice(lastIndex, match.index)
     if (before.trim()) nodes.push(<Streamdown key={`text-${lastIndex}`}>{before}</Streamdown>)
-    nodes.push(<InlineDiagram key={`diagram-${match.index}`} source={match[2]} language={match[1].toLowerCase()} />)
+    const kind = match[1].toLowerCase()
+    if (kind === 'diagram' || (kind === 'json' && isDiagramJson(match[2]))) {
+      nodes.push(<InlineDiagram key={`diagram-${match.index}`} source={match[2]} />)
+    } else if (kind === 'image') {
+      nodes.push(<InlineImage key={`image-${match.index}`} prompt={parseImagePrompt(match[2])} />)
+    } else if (kind === 'doc') {
+      nodes.push(<InlineDoc key={`doc-${match.index}`} source={match[2]} />)
+    } else if (kind === 'json') {
+      nodes.push(<Streamdown key={`code-${match.index}`}>{match[0]}</Streamdown>)
+    } else {
+      nodes.push(<InlineDiagram key={`diagram-${match.index}`} source={match[2]} language={kind} />)
+    }
     lastIndex = match.index + match[0].length
   }
   let after = content.slice(lastIndex)
-  // Hide a still-streaming, unclosed diagram fence instead of showing raw JSON.
-  const incomplete = after.match(/```(?:diagram|html|drawing)\s*[\s\S]*$/i)
+  // Hide a still-streaming, unclosed block instead of showing its raw JSON.
+  const incomplete = after.match(/```(?:diagram|image|doc|json|html|drawing)\s*[\s\S]*$/i)
   if (incomplete) after = after.slice(0, incomplete.index)
   if (after.trim()) nodes.push(<Streamdown key={`text-${lastIndex}`}>{after}</Streamdown>)
   return nodes
+}
+
+function isDiagramJson(source: string) {
+  try {
+    return Boolean(parseTutorDiagram(JSON.parse(source.trim())))
+  } catch {
+    return false
+  }
+}
+
+function parseImagePrompt(source: string) {
+  try {
+    const value = JSON.parse(source.trim()) as { prompt?: unknown }
+    if (typeof value.prompt === 'string' && value.prompt.trim()) return value.prompt.trim().slice(0, 900)
+  } catch {
+    // Fall back to the raw block text so a simple prompt still works.
+  }
+  return source.trim().replace(/^prompt:\s*/i, '').slice(0, 900) || 'A clear illustration of the topic discussed.'
 }
 
 function TutorPage() {
@@ -66,6 +99,7 @@ function TutorPage() {
   const savedActiveChat = history.find((conversation) => conversation.id === activeChatId)
   const { messages, sendMessage, isLoading } = useTutorChat(activeChatId, savedActiveChat?.messages)
   const [input, setInput] = useState('')
+  const [extraImages, setExtraImages] = useState<Record<string, string>>({})
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -132,15 +166,32 @@ function TutorPage() {
               <p className="welcome-copy">Ask a question, explore an idea, or work through a project. I’ll explain things clearly and help you learn one step at a time.</p>
               <div className="tutor-suggestions">{suggestions.map((suggestion) => <button type="button" key={suggestion} onClick={() => submit(suggestion)}>{suggestion}<ArrowUp size={14} /></button>)}</div>
             </div>
-            ) : messages.map(({ id, role, parts }) => (
+            ) : messages.map(({ id, role, parts }) => {
+              const text = parts
+                .filter((part) => part.type === 'text')
+                .map((part) => part.content || '')
+                .join('\n')
+              const note = stripSpecialBlocks(text)
+              const title = note.split('\n').find((line) => /^#{1,3}\s/.test(line))?.replace(/^#{1,3}\s*/, '') || conversationTitle(messages)
+              const illustration = extraImages[id]
+              return (
             <article key={id} className={`tutor-message ${role === 'assistant' ? 'from-tutor' : 'from-learner'}`}>
               <span className="message-label">{role === 'assistant' ? 'YOUR TUTOR' : 'YOU'}</span>
               <div className="message-content">{parts.map((part, index) => {
                 if (part.type !== 'text' || !part.content) return null
                 return <div key={index}>{renderMessageContent(part.content)}</div>
               })}</div>
+              {illustration && <InlineImage prompt={illustration} />}
+              {role === 'assistant' && note && (
+                <div className="message-actions">
+                  <button type="button" onClick={() => downloadTextFile(`${safeFilename(title)}.md`, note, 'text/markdown')} aria-label="Save this answer as a Markdown document"><Download size={14} /> Save .md</button>
+                  <button type="button" onClick={() => downloadTextFile(`${safeFilename(title)}.doc`, toWordDocument(title, note), 'application/msword')} aria-label="Save this answer as a Word document"><Download size={14} /> Save for Word</button>
+                  <button type="button" onClick={() => setExtraImages((current) => ({ ...current, [id]: note.slice(0, 900) }))} disabled={Boolean(illustration)} aria-label="Generate an illustration for this answer"><ImagePlus size={14} /> {illustration ? 'Illustration added' : 'Illustrate'}</button>
+                </div>
+              )}
             </article>
-            ))}
+            )
+            })}
             {isLoading && <div className="tutor-thinking"><span /><span /><span /> Thinking through this with you…</div>}
           </div>
         </div>
