@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowUp, BookOpen, Download, ImagePlus, RotateCcw, Sparkles } from 'lucide-react'
+import { ArrowUp, BookOpen, Download, History, ImagePlus, MessageCircle, RotateCcw, Sparkles, Trash2 } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Streamdown } from 'streamdown'
 import { useTutorChat } from '#/lib/tutor-ai-hook'
@@ -42,6 +42,13 @@ function createConversationId() {
   return typeof crypto !== 'undefined' && 'randomUUID' in crypto
     ? crypto.randomUUID()
     : `tutor-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+}
+
+function formatChatDate(timestamp: number) {
+  const date = new Date(timestamp)
+  if (Number.isNaN(date.getTime())) return 'Saved chat'
+  return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+    + ' · ' + date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
 }
 
 function renderMessageContent(content: string): ReactNode[] {
@@ -100,6 +107,8 @@ function TutorPage() {
   const { messages, sendMessage, isLoading } = useTutorChat(activeChatId, savedActiveChat?.messages)
   const [input, setInput] = useState('')
   const [extraImages, setExtraImages] = useState<Record<string, string>>({})
+  const [historyOpen, setHistoryOpen] = useState(false)
+  const historyMenuRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -137,13 +146,47 @@ function TutorPage() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
   }, [messages])
 
+  useEffect(() => {
+    if (!historyOpen) return
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (!historyMenuRef.current?.contains(event.target as Node)) setHistoryOpen(false)
+    }
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setHistoryOpen(false)
+    }
+    document.addEventListener('click', closeOnOutsideClick)
+    document.addEventListener('keydown', closeOnEscape)
+    return () => {
+      document.removeEventListener('click', closeOnOutsideClick)
+      document.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [historyOpen])
+
   const submit = (text = input) => {
     if (!text.trim() || isLoading) return
     sendMessage(text.trim())
     setInput('')
   }
+  const openChat = (id: string) => {
+    if (id === activeChatId || isLoading) return
+    setActiveChatId(id)
+    setInput('')
+    setExtraImages({})
+    setHistoryOpen(false)
+  }
+  const removeChat = (id: string) => {
+    setHistory((current) => current.filter((conversation) => conversation.id !== id))
+    if (id === activeChatId) {
+      setActiveChatId(createConversationId())
+      setInput('')
+      setExtraImages({})
+    }
+  }
   const startNewChat = () => {
     setActiveChatId(createConversationId())
+    setInput('')
+    setExtraImages({})
+    setHistoryOpen(false)
   }
 
   return (
@@ -153,6 +196,45 @@ function TutorPage() {
           <Link to="/" className="tutor-home-link" aria-label="Back to Learning AI">AI</Link>
           <div className="tutor-mark"><Sparkles size={21} /></div>
           <div className="tutor-title"><p>LEARNING AI · PERSONAL GUIDE</p><h1>Your AI tutor</h1></div>
+          <div className="tutor-history-menu" ref={historyMenuRef}>
+            <button
+              type="button"
+              className="tutor-history-trigger"
+              onClick={() => setHistoryOpen((open) => !open)}
+              aria-expanded={historyOpen}
+              aria-haspopup="menu"
+              aria-label="Chat histories"
+              disabled={isLoading}
+            >
+              <History size={16} /><span>Chats</span>
+              {history.length > 0 && <em>{history.length}</em>}
+            </button>
+            {historyOpen && (
+              <div className="tutor-history-panel" role="menu" aria-label="Chat histories">
+                <div className="tutor-history-panel-head"><span>Chat histories</span><span>{history.length} saved</span></div>
+                {history.length === 0 ? (
+                  <p className="tutor-history-empty">Your conversations will appear here once you start chatting.</p>
+                ) : (
+                  <ul className="tutor-history-list">
+                    {history.map((conversation) => (
+                      <li key={conversation.id} className={conversation.id === activeChatId ? 'is-active' : ''}>
+                        <button type="button" role="menuitem" className="tutor-history-item" onClick={() => openChat(conversation.id)}>
+                          <MessageCircle size={14} />
+                          <span className="tutor-history-item-text">
+                            <strong>{conversation.title}</strong>
+                            <small>{formatChatDate(conversation.updatedAt)}</small>
+                          </span>
+                        </button>
+                        <button type="button" className="tutor-history-delete" onClick={() => removeChat(conversation.id)} aria-label={`Delete chat: ${conversation.title}`} title="Delete chat">
+                          <Trash2 size={14} />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+          </div>
           <button type="button" className="tutor-reset" onClick={startNewChat} disabled={isLoading} aria-label="Start a new chat"><RotateCcw size={16} /><span>New chat</span></button>
         </header>
 
