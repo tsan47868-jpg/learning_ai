@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowUp, BookOpen, MessagesSquare, RotateCcw, Sparkles } from 'lucide-react'
+import { ArrowUp, BookOpen, RotateCcw, Sparkles } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Streamdown } from 'streamdown'
 import { useTutorChat } from '#/lib/tutor-ai-hook'
@@ -33,17 +33,6 @@ function conversationTitle(messages: TutorChatMessages) {
     .replace(/\s+/g, ' ')
     .trim()
   return title ? (title.length > 42 ? `${title.slice(0, 42).trim()}…` : title) : 'New conversation'
-}
-
-function conversationPreview(messages: TutorChatMessages) {
-  const lastUser = [...messages].reverse().find((message) => message.role === 'user')
-  const preview = lastUser?.parts
-    .filter((part) => part.type === 'text')
-    .map((part) => part.content || '')
-    .join(' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-  return preview ? `You: ${preview}` : 'Open to view this conversation'
 }
 
 function createConversationId() {
@@ -125,7 +114,6 @@ function TutorPage() {
   const [history, setHistory] = useState<SavedConversation[]>([])
   const [historyReady, setHistoryReady] = useState(false)
   const [activeChatId, setActiveChatId] = useState('learning-ai-tutor')
-  const [mobileHistoryOpen, setMobileHistoryOpen] = useState(false)
   const savedActiveChat = history.find((conversation) => conversation.id === activeChatId)
   const { messages, sendMessage, isLoading } = useTutorChat(activeChatId, savedActiveChat?.messages)
   const [input, setInput] = useState('')
@@ -175,13 +163,6 @@ function TutorPage() {
   const startNewChat = () => {
     setDiagram(undefined)
     setActiveChatId(createConversationId())
-    setMobileHistoryOpen(false)
-  }
-  const openConversation = (conversation: SavedConversation) => {
-    if (isLoading) return
-    setDiagram(findLatestDiagram(conversation.messages))
-    setActiveChatId(conversation.id)
-    setMobileHistoryOpen(false)
   }
   const latestQuestion = [...messages]
     .reverse()
@@ -198,32 +179,10 @@ function TutorPage() {
       <section className="tutor-shell">
         <header className="tutor-heading">
           <Link to="/" className="tutor-home-link" aria-label="Back to Learning AI">AI</Link>
-          <button type="button" className="tutor-mobile-history" onClick={() => setMobileHistoryOpen((open) => !open)} aria-label="Toggle chat history" aria-expanded={mobileHistoryOpen}><MessagesSquare size={18} /></button>
           <div className="tutor-mark"><Sparkles size={21} /></div>
           <div className="tutor-title"><p>LEARNING AI · PERSONAL GUIDE</p><h1>Your AI tutor</h1></div>
           <button type="button" className="tutor-reset" onClick={startNewChat} disabled={isLoading} aria-label="Start a new chat"><RotateCcw size={16} /><span>New chat</span></button>
         </header>
-
-        {mobileHistoryOpen && <button type="button" className="tutor-mobile-backdrop" onClick={() => setMobileHistoryOpen(false)} aria-label="Close chat history" />}
-        <aside className={`tutor-sidebar ${mobileHistoryOpen ? 'is-mobile-open' : ''}`}>
-          <Link to="/" className="tutor-sidebar-brand"><span>AI</span><b>Learning AI</b></Link>
-          <button type="button" className="tutor-sidebar-new" onClick={startNewChat} disabled={isLoading}><RotateCcw size={16} /> New chat</button>
-          <div className="tutor-history-section">
-            <p>RECENT CHATS</p>
-            {history.length ? history.map((conversation) => <button key={conversation.id} type="button" className={conversation.id === activeChatId ? 'is-active' : ''} onClick={() => openConversation(conversation)} disabled={isLoading} title={`Open conversation: ${conversation.title}`} aria-label={`Open conversation: ${conversation.title}`}><span>{conversation.title}</span><small className="tutor-history-preview">{conversationPreview(conversation.messages)}</small><small className="tutor-history-date">{conversation.updatedAt ? new Date(conversation.updatedAt).toLocaleDateString() : ''}</small></button>) : <span className="tutor-history-empty">Your chats will appear here.</span>}
-          </div>
-          <div className="tutor-sidebar-section">
-            <p>EXPLORE A TOPIC</p>
-            {[
-              ['AI foundations', 'Explain the basic ideas behind artificial intelligence.'],
-              ['Prompting', 'Show me how to write a clear prompt, with an example.'],
-              ['AI APIs', 'Explain how an AI API works from my app to the answer.'],
-              ['Automations', 'Show me how AI can fit into a simple automation.'],
-            ].map(([label, question]) => <button key={label} type="button" onClick={() => submit(question)} disabled={isLoading}>{label}<span>↗</span></button>)}
-          </div>
-          <div className="tutor-sidebar-note"><Sparkles size={16} /><p>Your tutor will explain the idea and draw a visual for every answer.</p></div>
-          <Link to="/talks" className="tutor-sidebar-footer">Browse learning guides <span>↗</span></Link>
-        </aside>
 
         <div className="tutor-conversation-layout">
           <div className="tutor-transcript" ref={scrollRef} aria-live="polite">
