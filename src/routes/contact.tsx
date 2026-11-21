@@ -1,11 +1,15 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState, type FormEvent } from 'react'
-import { ArrowRight, Mail, MessageCircle, Lightbulb, Sparkles } from 'lucide-react'
+import { useRef, useState, type FormEvent } from 'react'
+import { ArrowRight, Mail, MessageCircle, Lightbulb } from 'lucide-react'
+import PageHero from '#/components/PageHero'
+import { useRevealOnScroll } from '#/lib/use-reveal'
 
 export const Route = createFileRoute('/contact')({ component: ContactPage })
 
 function ContactPage() {
   const [formNotice, setFormNotice] = useState('')
+  const pageRef = useRef<HTMLElement>(null)
+  useRevealOnScroll(pageRef, '.contact-section-heading, .contact-card, .contact-form-section, .contact-note, .contact-bottom-inner')
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -21,15 +25,15 @@ function ContactPage() {
   }
 
   return (
-    <main className="contact-page">
-      <section className="contact-hero page-wrap px-4">
-        <div className="contact-intro">
-          <p className="home-eyebrow"><span /> Questions, ideas, and hellos</p>
-          <h1>Let’s talk<br /><em>about AI.</em></h1>
-          <p>Whether you’re just getting started, untangling an automation, or figuring out an API, we’d love to hear what you’re working on.</p>
-        </div>
-        <div className="contact-stamp"><Sparkles size={24} /><span>Curiosity<br />welcome here.</span><b>✳</b></div>
-      </section>
+    <main className="contact-page" ref={pageRef}>
+      <PageHero
+        wordmark="CONTACT"
+        eyebrow="Questions, ideas, and hellos"
+        title={<>Let’s talk<br /><em>about AI.</em></>}
+        sub="Whether you’re just getting started, untangling an automation, or figuring out an API, we’d love to hear what you’re working on."
+        actions={<Link to="/tutor" className="home-button">Ask the tutor instead <ArrowRight size={17} /></Link>}
+        phone={{ badge: 'Say hello', title: <>Let’s talk<br />about AI</>, cta: 'Write a message' }}
+      />
 
       <section className="contact-content page-wrap px-4">
         <div className="contact-section-heading"><div><p className="home-eyebrow">Get in touch</p><h2>How can we<br /><em>help you?</em></h2></div><p>Choose the option that fits, and tell us a little about what you need. We’ll point you in the right direction.</p></div>
@@ -53,7 +57,7 @@ function ContactPage() {
         </section>
         <div className="contact-note"><span>✳</span><p><strong>A quick note:</strong> The email address is currently a placeholder. Replace <b>hello@example.com</b> with your preferred contact address before publishing.</p></div>
       </section>
-      <section className="contact-bottom"><div className="page-wrap contact-bottom-inner"><p className="home-eyebrow">Keep exploring</p><h2>Good questions lead<br /><em>to useful things.</em></h2><Link to="/talks" className="home-button">Browse AI topics <ArrowRight size={17}/></Link></div></section>
+      <section className="contact-bottom green-cta"><div className="page-wrap contact-bottom-inner"><p className="home-eyebrow">Keep exploring</p><h2>Good questions lead<br /><em>to useful things.</em></h2><Link to="/talks" className="home-button">Browse AI topics <ArrowRight size={17}/></Link></div></section>
     </main>
   )
 }
