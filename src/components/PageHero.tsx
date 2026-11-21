@@ -57,7 +57,19 @@ export default function PageHero({ wordmark, eyebrow, title, sub, note, actions,
           {actions && <div className="page-hero-actions">{actions}</div>}
           {note && <p className="page-hero-note">{note}</p>}
         </div>
-        <div className="page-hero-visual" ref={visualRef} aria-label="Preview of Learning AI on mobile with the AI tutor">
+        <div className="page-hero-visual" ref={visualRef} aria-label="Preview of Learning AI on laptop and mobile with the AI tutor">
+          <div className="laptop-mock" aria-hidden="true">
+            <div className="laptop-lid">
+              <div className="laptop-screen">
+                <div className="laptop-mini-nav"><b>learning ai</b><i /><i /><i /></div>
+                <span className="laptop-mini-badge"><Sparkles size={9} /> {phone.badge}</span>
+                <div className="laptop-mini-title">{phone.title}</div>
+                <span className="laptop-mini-cta">{phone.cta} <ArrowRight size={9} /></span>
+                <div className="laptop-mini-grid"><i /><i /><i /></div>
+              </div>
+            </div>
+            <div className="laptop-base"><span /></div>
+          </div>
           <div className="phone-mock" aria-hidden="true">
             <div className="phone-frame">
               <span className="phone-notch" />
