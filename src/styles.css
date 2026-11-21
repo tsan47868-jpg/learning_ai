@@ -128,6 +128,7 @@
 .learning-home .manifesto-inner{grid-template-columns:minmax(0,1fr);justify-items:center;margin-inline:auto;text-align:center}
 .learning-home .manifesto-inner>div .home-eyebrow{justify-content:center}
 .learning-home .manifesto-inner>div>p:last-child{margin-inline:auto}
+.learning-home .journey-section{margin-inline:auto}
 .learning-home .journey-stage{grid-template-columns:minmax(0,1fr);justify-items:center}
 .learning-home .journey-stage .stage-marker{display:none}
 .learning-home .journey-stage .stage-card,.learning-home .journey-stage:nth-of-type(even) .stage-card{grid-column:1;grid-row:auto;width:min(100%,560px);justify-self:center;text-align:center}
@@ -141,7 +142,7 @@
 @media(max-width:800px){.learning-home .home-hero{grid-template-columns:minmax(0,1fr)}}
 
 /* Journey: three stage cards side by side, milestones inside each card,
-   sticky notes pinned above and below the card row. */
+   sticky notes in a centered row above the card row. */
 .learning-home .journey-track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.1rem;max-width:960px}
 .learning-home .journey-stage{display:block;min-height:0;padding-bottom:0}
 .learning-home .journey-stage:nth-of-type(2){transition-delay:.15s}
@@ -152,11 +153,13 @@
 .learning-home .journey-stage .milestone-card{position:static;margin-top:auto;min-width:0}
 .learning-home .journey-stage:nth-of-type(2) .stage-icon{background:#fbefea;color:#c86e56}
 .learning-home .journey-stage:nth-of-type(3) .stage-icon{background:#fbf3e6;color:#bd8b42}
-.learning-home .note-1{top:-46px;left:0;right:auto}
-.learning-home .note-2{top:-34px;left:32%;right:auto}
-.learning-home .note-3{top:-50px;right:2%;left:auto}
-.learning-home .note-4{top:auto;bottom:-28px;left:12%;right:auto}
-.learning-home .note-5{top:auto;bottom:-34px;right:16%;left:auto}
+/* Sticky notes: one centered row above the stage cards instead of pinned left/right.
+   Scoped to the widths where the notes are meant to be visible (they stay hidden
+   below 900px, as before). */
+@media(min-width:901px){
+  .learning-home .journey-sticky-notes{position:static;inset:auto;display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem 1rem;grid-column:1/-1;margin-bottom:1.75rem;pointer-events:none}
+  .learning-home .journey-sticky-note{position:static;max-width:none}
+}
 @media(max-width:860px){.learning-home .journey-track{grid-template-columns:1fr;max-width:560px}}
 
 @plugin "tailwindcss-animate";
